@@ -1,0 +1,72 @@
+.header {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e6e6e6;
+    font-size: 18px;
+    overflow: hidden;
+    width: 410px;
+    height: 63px;
+    background: none;
+}
+
+.signupHeader {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 1px solid #e6e6e6;
+    width: 410px;
+    height: 63px;
+    top: 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #000000;
+}
+
+.backBtn {
+    position: absolute;
+    display: flex;
+    width: 40px;
+    height: 40px;
+    left: 10px;
+    border: none;
+    background-color: #00ff16;
+}
+
+.homeHeader {
+    position: absolute;
+    display: flex;
+    width: 410px;
+    height: 63px;
+    background: #a0c4ff;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.itemDetailHeader, .chatHeader, .chatListHeader {
+    position: absolute;
+    display: flex;
+    width: 410px;
+    height: 63px;
+    background: #a0c4ff;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.registerHeader {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    overflow: hidden;
+    width: 410px;
+    height: 63px;
+    background: #a0c4ff;
+}
+

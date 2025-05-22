@@ -1,0 +1,57 @@
+.container {
+    position: relative;
+    display: flex;
+    border: #1a1a1a solid 1px;
+    width: 410px;
+    height: 100vh;
+    gap: 10px;
+    overflow: hidden;
+    border-radius: 20px;
+    flex-direction: column;
+}
+
+.homeContainer {
+    flex: 1;
+    display: flex;
+    overflow-y: auto;
+    margin-top: 135px;
+    margin-bottom: 70px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}
+
+.buttonContainer {
+    display: flex;
+    position: absolute;
+    height: 70px;
+    width: 410px;
+    top: 60px;
+    border: none;
+    justify-content: flex-start;
+    flex-direction: row;
+    align-items: center;
+}
+
+.all, .free {
+    display: flex;
+    background: none;
+    border: none;
+    border-bottom: #a0c4ff solid 1px;
+    padding: 5px;
+    margin: 5px;
+    outline: none;
+}
+
+.emptyMessage {
+    text-align: center;
+    color: #999;
+    font-size: 16px;
+    padding: 40px 0;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .container {
+    }
+}

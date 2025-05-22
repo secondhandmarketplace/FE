@@ -1,0 +1,38 @@
+.container {
+    display: flex;
+    position: relative;
+    border: #1a1a1a solid 1px;
+    width: 410px;
+    height: 736px;
+    gap: 10px;
+    overflow: hidden;
+    border-radius: 20px;;
+}
+
+.chatList {
+    background: #00ff16;
+    height: 580px;
+    width: 100%;
+    margin-top: 65px;
+    overflow-y: auto;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}
+
+.chatRoom {
+    flex: 1;
+    border: #1a1a1a solid 1px;
+    width: 410px;
+    height: 70px;
+}
+
+
+.lastMessage {
+
+}
+
+.time {
+
+}

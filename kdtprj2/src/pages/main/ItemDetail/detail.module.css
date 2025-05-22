@@ -1,0 +1,50 @@
+.container {
+    display: flex;
+    position: relative;
+    border: #1a1a1a solid 1px;
+    width: 410px;
+    height: 736px;
+    gap: 10px;
+    overflow: hidden;
+    border-radius: 20px;
+    flex-direction: column;
+}
+
+.detailContainer {
+    background-color: #00ff16;
+    display: flex;
+    height: 570px;
+    margin-top: 70px;
+    overflow-y: auto;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+
+}
+
+.imageContainer {
+    background-color: #ff0000;
+}
+
+.user {
+    background-color: #ff9900;
+
+}
+
+.item {
+    background-color: #6500fd;
+}
+
+.buttonContainer {
+    background-color: rgb(42, 113, 255);
+}
+
+.place {
+    background-color: #ffd16f;
+}
+
+.relatedItem {
+    background-color: #ff92f6;
+}

@@ -1,0 +1,100 @@
+.container {
+    display: flex;
+    position: relative;
+    border: #1a1a1a solid 1px;
+    flex-direction: column;
+    align-items: center;
+    width: 410px;
+    height: 736px;
+    gap: 50px;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.basicProfile {
+    position: static;
+    margin-top: 100px;
+    width: 130px;
+    height: 130px;
+    border: #1a1a1a solid 1px;
+    border-radius: 50%;
+    display: flex;
+}
+.inputContainer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+    height: 260px;
+    top: 50px;
+}
+
+.inputContainer input {
+    background-color: #f8f8f8;
+    box-shadow: inset 0 0 0 1px  #a0c4ff;
+    border: none;
+    position: relative;
+    display: flex;
+    width: 280px;
+    height: 40px;
+    font-size: 14px;
+    text-indent: 10px;
+}
+
+.enterID{
+    border-radius: 10px 10px 0 0;
+}
+.enterPW {
+    border-radius: 0 0 10px 10px;
+}
+
+.btnContainer {
+    display: flex;
+    justify-content: space-between;
+    width: 280px;
+    height: 40px;
+    margin-top: 10px;
+}
+
+.signUp, .forgotPW {
+    border: none;
+    text-decoration: underline;
+    font-size: 10px;
+    color: #8e8e8e;
+    outline: none;
+}
+
+.signUp:focus,
+.forgotPW:focus {
+    outline: none;
+    box-shadow: inset 0 0 0 1px #4a90e2;
+    border-radius: 4px;
+}
+
+
+.loginBtn {
+    position: absolute;
+    background-color: #ffffff;
+    box-shadow: inset 0 0 0 1px  #a0c4ff;
+    width: 280px;
+    height: 40px;
+    bottom: 60px;
+    font-size: 14px;
+    outline: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.loginBtn:focus,
+.loginBtn:focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 1px #555;
+}
+.loginBtn:hover {
+    background: #a0c4ff;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .container {
+    }
+}

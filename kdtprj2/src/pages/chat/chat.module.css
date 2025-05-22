@@ -1,0 +1,49 @@
+.container {
+    display: flex;
+    position: relative;
+    border: #1a1a1a solid 1px;
+    width: 410px;
+    height: 736px;
+    gap: 10px;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.chatContainer {
+    position: relative;
+    display: flex;
+    height: 675px;
+    margin-top: 64px;
+    overflow-y: auto;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    background: none;
+}
+
+.itemContainer {
+    flex: 1;
+    position: relative;
+    background: none;
+    width: 510px;
+    height: 110px;
+    display: flex;
+    flex-direction: row;
+    border: none;
+    border-bottom: #a0c4ff solid 1px;
+
+}
+
+.image {
+    background: none;
+    width: 110px;
+    height: 110px;
+}
+
+.item {
+    height: 110px;
+    width: 300px;
+    font-size: 12px;
+    background: none;
+}

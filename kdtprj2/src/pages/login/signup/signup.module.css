@@ -1,0 +1,120 @@
+.container {
+    display: flex;
+    position: relative;
+    border: #1a1a1a solid 1px;
+    width: 410px;
+    height: 736px;
+    gap: 10px;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.signupContainer {
+    flex: 1;
+    height: 600px;
+    margin-top: 72px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.labeledBox {
+    position: relative;
+    width: 300px;
+    margin: 30px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 24px 16px 16px;
+}
+
+.boxLabel {
+    position: absolute;
+    top: -12px;
+    left: 120px;
+    background: white;
+    padding: 0 10px;
+    font-size: 14px;
+    color: #636363;
+    font-weight: bold;
+    z-index: 1;
+}
+
+.authContainer {
+    display: flex;
+    background: none;
+    border: none;
+    border-radius: 12px;
+    width: 300px;
+    height: 50px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.authContainer input {
+    position: relative;
+    flex: 1;
+    width: 299px;
+    height: 45px;
+    border: 1px solid #a0c4ff;
+    border-radius: 10px;
+    text-indent: 10px;
+}
+
+.authContainer button {
+    background: #a0c4ff;
+    border: 1px solid #a0c4ff;
+    height: 45px;
+    width: 70px;
+    bottom: 50px;
+    font-size: 14px;
+    color: white;
+    border-radius: 10px;
+}
+
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+    gap: 45px;
+    background: none;
+    border: none;
+    border-radius: 12px;
+}
+
+.inputContainer input {
+    position: relative;
+    width: 299px;
+    height: 45px;
+    border: 1px solid  #a0c4ff;
+    border-radius: 10px;
+    font-size: 14px;
+    text-indent: 10px;
+}
+
+.inputRow button {
+    height: 45px;
+    padding: 0 12px;
+    background: #a0c4ff;
+    border: 1px solid #a0c4ff;
+    border-radius: 10px;
+    color: white;
+    font-size: 14px;
+}
+
+.inputRow {
+    display: flex;
+    width: 299px;
+    gap: 10px;
+}
+
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .container {
+    }
+}
