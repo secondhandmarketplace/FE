@@ -5,15 +5,7 @@ import styles from "./footer.module.css";
 function Footer() {
     const location = useLocation();
 
-    if (location.pathname === '/login') return null;
-
-    if (location.pathname === "/signup") {
-        return (
-            <footer className={styles.signupFooter}>
-                <Link to="/home" className={styles.signupBtn}>회원가입하기</Link>
-            </footer>
-        );
-    }
+    if (location.pathname === '/login' || location.pathname === '/signup') return null;
 
     if (location.pathname === "/home" || location.pathname .startsWith("/item/") || location.pathname === "/chatList") {
         return (

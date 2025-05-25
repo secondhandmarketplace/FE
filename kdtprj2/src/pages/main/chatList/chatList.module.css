@@ -3,36 +3,78 @@
     position: relative;
     border: #1a1a1a solid 1px;
     width: 410px;
-    height: 736px;
-    gap: 10px;
+    height: 100vh;
     overflow: hidden;
     border-radius: 20px;;
 }
 
 .chatList {
-    background: #00ff16;
+    display: flex;
     height: 580px;
     width: 100%;
-    margin-top: 65px;
+    margin-top: 75px;
     overflow-y: auto;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .chatRoom {
-    flex: 1;
-    border: #1a1a1a solid 1px;
-    width: 410px;
-    height: 70px;
+    display: flex;
+    background: #f4f4f4;
+    border-bottom: #919191 solid 1px;
+    border-top: #919191 solid 1px;
+    margin-top: 10px;
+    gap: 20px;
+    max-height: 70px;
+    flex-direction: row;
+    padding: 0 10px;
+}
+.chatRoom:hover {
+    background: #bcbcbc;
 }
 
+.mainImage {
+    background: #ed2800;
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.chatBox {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    text-indent: 10px;
+
+}
+
+.userName {
+    display: flex;
+    align-items: center;
+    color: #000000;
+    width: 100%;
+    font-size: 14px;
+    font-weight: bold;
+    height: 100%;
+}
 
 .lastMessage {
-
+    background: none;
+    display: flex;
+    font-size: 18px;
+    align-items: flex-end;
+    min-width: 200px;
+    height: 60px;
+    color: #919191;
 }
 
 .time {
-
+    background: none;
+    display: flex;
+    align-items: flex-end;
+    font-size: 14px;
+    width: 70px;
+    color: #919191;
 }

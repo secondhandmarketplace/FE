@@ -16,9 +16,8 @@
     overflow-y: auto;
     margin-top: 135px;
     margin-bottom: 70px;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     gap: 15px;
 }
 
@@ -32,16 +31,27 @@
     justify-content: flex-start;
     flex-direction: row;
     align-items: center;
+    overflow-x: auto;
 }
 
-.all, .free {
+.button {
     display: flex;
+    width: 70px;
+    height: 30px;
+    flex-shrink: 0;
     background: none;
     border: none;
-    border-bottom: #a0c4ff solid 1px;
+    border-bottom: #000000 solid 2px;
     padding: 5px;
-    margin: 5px;
+    margin: 8px;
+    font-size: 12px;
+    justify-content: center;
+    white-space: nowrap;
     outline: none;
+}
+
+.active {
+    background-color: #a0c4ff;
 }
 
 .emptyMessage {

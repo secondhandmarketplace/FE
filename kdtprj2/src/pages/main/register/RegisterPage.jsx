@@ -11,6 +11,7 @@ function RegisterPage() {
     const [price, setPrice] = useState("");
     const [tag, setTag] = useState("");
     const [description, setDescription] = useState("");
+    const user = JSON.parse(localStorage.getItem("userId"));
 
     const isTitleOver = title.length > 20;
 
@@ -45,8 +46,9 @@ function RegisterPage() {
             price: Number(price),
             tags: tagArray,
             description,
-            imageUrl: "/cat1.svg",
+            imageUrl: images[0]?.url,
             status: "판매중",
+            OwnerId: user.userId,
         };
 
         const saved = JSON.parse(localStorage.getItem("items") || "[]");
@@ -140,7 +142,7 @@ function RegisterPage() {
                         className={styles.input}
                         value={tag}
                         onChange={(e) => setTag(e.target.value)}
-                        placeholder="#중고"
+                        placeholder="중고"
                     />
 
                     <label className={styles.label}>

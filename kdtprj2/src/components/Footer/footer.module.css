@@ -12,45 +12,6 @@
     font-weight: bold;
 }
 
-.signupFooter {
-    display: flex;
-    position: absolute;
-    background: none;
-    border: 1px solid #e6e6e6;
-    justify-content: center;
-    align-items: center;
-    width: 410px;
-    height: 63px;
-    bottom: 0;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.signupBtn {
-    display: flex;
-    position: absolute;
-    border-radius: 10px;
-    width: 290px;
-    height: 45px;
-    font-size: 14px;
-    background-color: #e9f1ff;
-    border: 1px solid #ccc;
-    box-shadow: inset 0 0 0 1px  #a0c4ff;
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
-}
-
-.signupBtn:focus,
-.signupBtn:focus-visible {
-    outline: none;
-    box-shadow: inset 0 0 0 1px #e9f1ff;
-}
-.signupBtn:hover {
-    background: #99c0ff;
-}
-
-
 .homeFooter {
     display: flex;
     position: absolute;

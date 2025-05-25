@@ -1,16 +1,11 @@
 import { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import styles from './chatWindow.module.css';
-import io from 'socket.io-client';
 import Message from '../Message/Message';
 import sendBtn from '/sendBtn.svg';
 import { handleSend, makeRoomIdFromItem } from '../../utils/chatUtils';
-
-// 클라이언트
-const socket = io("http://localhost:5174");
-socket.on('connect', () => {
-    console.log('연결돾ㅆ냐:', socket.id);
-});
+import socket from '../../utils/socket.js';
+import { formatDate, formatTime } from '../../utils/timeUtils';
 
 function ChatWindow() {
     const location = useLocation();
@@ -21,26 +16,12 @@ function ChatWindow() {
     const messageEndRef = useRef(null);
 
     const roomId = makeRoomIdFromItem(item);
-
-    const formatDate = (timestamp) => {
-        return new Date(timestamp).toLocaleDateString('ko-KR', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            weekday: 'short',
-        });
-    };
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const userId = user.userId || "";
 
     const firstDate = message.length > 0
         ? formatDate(message[0].timestamp)
         : null;
-
-    const formatTime = (timestamp) => {
-        return new Date(timestamp).toLocaleTimeString('ko-KR', {
-            hour: '2-digit',
-            minute: '2-digit',
-        });
-    };
 
     useEffect(() => {
         socket.emit('joinRoom', roomId);
@@ -63,7 +44,6 @@ function ChatWindow() {
             });
         };
 
-        socket.off('messages');
         socket.on('messages', handleReceive);
 
         return () => {
@@ -85,7 +65,7 @@ function ChatWindow() {
                     <Message
                         key={idx}
                         text={msg.content}
-                        isMine={msg.sender === socket.id}
+                        isMine={msg.sender === userId}
                         time={formatTime(msg.timestamp)}
                     />
                 ))}
@@ -96,12 +76,15 @@ function ChatWindow() {
                     type="text"
                     value={input}
                     onChange={e => setInput(e.target.value)}
-                    onKeyUp={(e) => {
-                        if (e.key === 'Enter' && !e.shiftKey) handleSend({input, setInput, roomId});
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            handleSend({input, setInput, roomId, item});
+                        }
                     }}
                     placeholder="메세지를 입력하세요"
                 />
-                <img src={sendBtn} alt="전송 버튼" onClick={() => handleSend({input, setInput, roomId })} />
+                <img src={sendBtn} alt="전송 버튼" onClick={() => handleSend({input, setInput, roomId, item })} />
             </div>
         </div>
     )

@@ -1,19 +1,22 @@
-import { io } from 'socket.io-client';
-
-const socket = io('http://localhost:5174');
+import socket from './socket.js'
 
 export const makeRoomIdFromItem = (item) => {
     // 상품 ID 기반으로 고유한 roomId 생성
     return `room-${item.id}`;
 };
 
-export const handleSend = ({ input, setInput, roomId }) => {
+const user = JSON.parse(localStorage.getItem('user'));
+const userId = user?.userId;
+
+export const handleSend = ({ input, setInput, roomId, item }) => {
     const trimmed = input.trim();
     if (!trimmed) return;
 
+    console.log("handleSend");
+
     const timestamp = Date.now();
     const newMsg = {
-        sender: socket.id,
+        sender: userId,
         content: trimmed,
         timestamp,
         roomId,
@@ -22,16 +25,14 @@ export const handleSend = ({ input, setInput, roomId }) => {
     socket.emit('messages', newMsg);
     setInput('');
 
-    const storedMessages = JSON.parse(localStorage.getItem(`chatMessages-${roomId}`)) || [];
-    const updatedMessages = [...storedMessages, newMsg];
-    localStorage.setItem(`chatMessages-${roomId}`, JSON.stringify(updatedMessages));
-
     const chatList = JSON.parse(localStorage.getItem('chatList')) || [];
 
     const newRoom = {
         roomId,
         lastMessage: newMsg.content,
         lastTimestamp: newMsg.timestamp,
+        imageUrl: item.imageUrl,
+        nickname: "판매자",
     };
 
     const updated = [
