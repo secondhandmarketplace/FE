@@ -6,6 +6,7 @@ import sendBtn from '/sendBtn.svg';
 import { handleSend, makeRoomIdFromItem } from '../../utils/chatUtils';
 import socket from '../../utils/socket.js';
 import { formatDate, formatTime } from '../../utils/timeUtils';
+import { getUserId } from "../../utils/authUtils.js";
 
 function ChatWindow() {
     const location = useLocation();
@@ -16,8 +17,14 @@ function ChatWindow() {
     const messageEndRef = useRef(null);
 
     const roomId = makeRoomIdFromItem(item);
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const userId = user.userId || "";
+    const userId = getUserId();
+
+    // 확인용 로그
+    console.log("item:", item);
+    console.log("roomId:", roomId);
+    console.log("보내는 userId:", userId);
+    console.log("받은 메시지:", message);
+
 
     const firstDate = message.length > 0
         ? formatDate(message[0].timestamp)
@@ -58,9 +65,9 @@ function ChatWindow() {
     return (
         <div className={styles.chatWindow}>
             <div className={styles.chatMessage}>
-                <div className={styles.dateDivider}>
+                {message.length > 0 && (<div className={styles.dateDivider}>
                     {firstDate}
-                </div>
+                </div>)}
                 {message.map((msg, idx) => (
                     <Message
                         key={idx}
@@ -76,7 +83,7 @@ function ChatWindow() {
                     type="text"
                     value={input}
                     onChange={e => setInput(e.target.value)}
-                    onKeyDown={(e) => {
+                    onKeyUp={(e) => {
                         if (e.key === 'Enter' && !e.shiftKey) {
                             e.preventDefault();
                             handleSend({input, setInput, roomId, item});

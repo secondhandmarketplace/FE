@@ -8,7 +8,7 @@ import App from './App.jsx'
 import LoginRoutes from './routes/loginRoutes.jsx'
 import homeRoutes from './routes/homeRoutes.jsx'
 import ChatRoutes from './routes/chatRoutes.jsx'
-// import ProfileRoute from './routes/profileRoutes.jsx'
+import historyRoutes from './routes/historyRoutes.jsx'
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
@@ -18,7 +18,7 @@ createRoot(document.getElementById('root')).render(
                     {LoginRoutes}
                     {homeRoutes}
                     {ChatRoutes}
-                    {/*{ProfileRoute}*/}
+                    {historyRoutes}
                 </Route>
             </Routes>
         </BrowserRouter>

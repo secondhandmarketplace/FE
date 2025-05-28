@@ -27,23 +27,32 @@
     position: relative;
     background: none;
     width: 510px;
-    height: 110px;
+    height: 90px;
     display: flex;
     flex-direction: row;
     border: none;
     border-bottom: #a0c4ff solid 1px;
-
+    gap: 10px;
 }
 
 .image {
     background: none;
-    width: 110px;
-    height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    /*border-radius: 50%;*/
 }
 
 .item {
-    height: 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: 90px;
     width: 300px;
     font-size: 12px;
     background: none;
 }
+

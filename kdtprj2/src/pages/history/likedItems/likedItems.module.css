@@ -1,0 +1,51 @@
+.container {
+    position: relative;
+    display: flex;
+    border: #1a1a1a solid 1px;
+    width: 410px;
+    height: 100vh;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.likedBox {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffcf09;
+    height: 600px;
+    margin-top: 60px;
+    width: 100%;
+    gap: 16px;
+    overflow-y: auto;
+
+}
+
+.likedItem {
+    display: flex;
+    flex-direction: column;
+    background-color: #ff0000;
+    gap: 10px;
+}
+
+.item {
+    background: aqua;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    height: 100px;
+    gap: 10px;
+}
+
+.unlikeBtn {
+    background: #ffcf09;
+    width: 50px;
+    height: 50px;
+}
+
+.empty {
+    text-align: center;
+    color: #999;
+    font-size: 16px;
+    padding: 40px 0;
+}

@@ -27,7 +27,7 @@ app.post("/api/user/signup", (req, res) => {
 });
 
 app.post("/api/login", (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, phone, address, school } = req.body;
 
     if (!email || !password) {
         return res.status(400).json({ message: "이메일/비번 필요함"})
@@ -38,6 +38,9 @@ app.post("/api/login", (req, res) => {
             userId: "1234",
             nickname: "홍길동",
             email,
+            phone,
+            address,
+            school,
         }
     })
 })
@@ -49,14 +52,20 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
     console.log('사용자 접속:', socket.id);
 
-    socket.on('joinRoom', (roomId) => {
+    socket.on('joinRoom', (roomId) => {3
         socket.join(roomId);
         console.log(`${socket.id}가 ${roomId}에 들어갔습`);
     })
 
-    socket.on('messages', ({ roomId, ...message }) => {
+    socket.on('messages', (msg) => {
+            const { roomId, sender, content, timestamp } = msg;
             // 특정 채팅방으로만 메시지 전송
-            io.to(roomId).emit('messages', { ...message, roomId });
+            io.to(roomId).emit('messages', {
+                roomId,
+                sender,
+                content,
+                timestamp,
+            });
     });
 
     socket.on('disconnect', () => {

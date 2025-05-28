@@ -1,4 +1,4 @@
-.header {
+.basicHeader {
     position: absolute;
     display: flex;
     align-items: center;
@@ -36,6 +36,18 @@
     background-color: #00ff16;
 }
 
+.Header {
+    position: absolute;
+    display: flex;
+    width: 410px;
+    height: 63px;
+    background: #a0c4ff;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
 .homeHeader {
     position: absolute;
     display: flex;
@@ -44,29 +56,18 @@
     background: #a0c4ff;
     flex-shrink: 0;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
 }
 
-.itemDetailHeader, .chatHeader, .chatListHeader {
+.searchBtn {
     position: absolute;
+    background: none;
     display: flex;
-    width: 410px;
-    height: 63px;
-    background: #a0c4ff;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
 }
 
-.registerHeader {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    overflow: hidden;
-    width: 410px;
-    height: 63px;
-    background: #a0c4ff;
+.searchBtn:focus {
+    outline: none;
 }
+
+
 

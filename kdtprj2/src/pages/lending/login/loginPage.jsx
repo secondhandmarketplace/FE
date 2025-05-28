@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./login.module.css";
-import ProfileImage from '../../components/ProfileImage';
+import ProfileImage from '../../../components/ProfileImage.jsx';
 
 function LoginPage() {
     const navigate = useNavigate();

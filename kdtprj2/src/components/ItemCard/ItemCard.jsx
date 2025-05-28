@@ -7,6 +7,21 @@ function ItemCard({item}) {
     const navigate = useNavigate();
 
     const handleClick = () => {
+        const viewed = JSON.parse(localStorage.getItem("viewedItems") || "[]");
+
+        // 중복 방지: 이미 있는 item 은 제거하고 맨 뒤에 다시 추가 (최근 조회 기준)
+        const filtered = viewed.filter(v => v.id !== item.id);
+        const updated = [...filtered, item]; // 최신 클릭을 맨 뒤로
+
+        localStorage.setItem("viewedItems", JSON.stringify(updated));
+
+
+        const exists = viewed.find(v => v.id === item.id);
+        if (!exists) {
+            viewed.push(item);
+            localStorage.setItem("viewedItems", JSON.stringify(viewed));
+        }
+
         navigate(`/item/${item.id}`, { state: item});
     };
 

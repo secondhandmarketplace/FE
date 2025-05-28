@@ -5,6 +5,7 @@ import Header from '../../../components/Header/Header.jsx';
 import { signupForm } from "../../../utils/signupForm.js";
 import { handleSignup } from "../../../utils/handleSignup.js";
 import {isSignupFormValid} from "../../../utils/validationForm.js";
+import Address from "../../../components/Address/Address.jsx";
 
 function SignupPage() {
     const navigate = useNavigate();
@@ -16,11 +17,18 @@ function SignupPage() {
         setForm({ ...form, [e.target.name]: e.target.value });
     }
 
+    const handleAddress = (data) => {
+        console.log("ㅅㅓㄴ택한 주소: ",data);
+    }
+
     return (
         <>
             <div className={styles.container}>
                 <Header />
-                <form className={styles.signupContainer} onSubmit={handleSignup}>
+                <form className={styles.signupContainer} onSubmit={async (e) => {
+                    e.preventDefault();
+                    await handleSignup({form, setUserId, setMessage, navigate });
+                }}>
                     <div className={styles.labeledBox}>
                         <span className={styles.boxLabel}>대학생 인증</span>
                         <div className={styles.authContainer}>
@@ -87,33 +95,24 @@ function SignupPage() {
                                 required
                             />
 
-                            <div className={styles.inputRow}>
-                                <input
-                                    name="address"
-                                    placeholder="주소를 입력하세요"
-                                    value={form.address}
-                                    onChange={handleChange}
-                                    required
-                                />
-                                <button type="button">주소찾기</button>
-                            </div>
+                            <Address onAddressSelected={handleAddress} />
                         </div>
 
                     </div>
                     {message && <div className={styles.message}>{message}</div>}
                     {userId && <div className={styles.userId}>발급된 userId: {userId}</div>}
+
+                    <div className={styles.signupFooter}>
+                        <button
+                            type="submit"
+                            className={`${styles.signupBtn} ${!isSignupFormValid(form) ? styles.disabled : ""}`}
+                            disabled = {!isSignupFormValid(form)}
+                        >
+                            회원가입하기
+                        </button>
+                    </div>
                 </form>
-                <div className={styles.signupFooter}>
-                    <button
-                        className={`${styles.signupBtn} ${!isSignupFormValid(form) ? styles.disabled : ""}`}
-                        disabled = {!isSignupFormValid(form)}
-                        onClick = {() => {
-                            handleSignup({form, setUserId, setMessage, navigate});
-                        }}
-                    >
-                        회원가입하기
-                    </button>
-                </div>
+
             </div>
         </>
     )

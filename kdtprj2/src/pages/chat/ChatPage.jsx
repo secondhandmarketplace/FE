@@ -14,7 +14,7 @@ const ChatPage = () => {
             <div className={styles.chatContainer}>
                 <div className={styles.itemContainer}>
                     <div className={styles.image}>
-                        <img src={item.imageUrl} alt="상품" />
+                        <img src={item.imageUrl} width={90} height={90} alt="상품" />
                     </div>
                     <div className={styles.item}>
                         <h2>{item.title}</h2>

@@ -3,7 +3,7 @@
     position: relative;
     border: #1a1a1a solid 1px;
     width: 410px;
-    height: 736px;
+    height: 100vh;
     gap: 10px;
     overflow: hidden;
     border-radius: 20px;
@@ -13,8 +13,8 @@
 .detailContainer {
     background-color: #00ff16;
     display: flex;
-    height: 570px;
-    margin-top: 70px;
+    height: 600px;
+    margin-top:60px;
     overflow-y: auto;
     flex-wrap: wrap;
     flex-direction: column;
@@ -26,6 +26,7 @@
 
 .imageContainer {
     background-color: #ff0000;
+    height: 90px;
 }
 
 .user {

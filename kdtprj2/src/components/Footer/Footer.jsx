@@ -7,7 +7,12 @@ function Footer() {
 
     if (location.pathname === '/login' || location.pathname === '/signup') return null;
 
-    if (location.pathname === "/home" || location.pathname .startsWith("/item/") || location.pathname === "/chatList") {
+    if (location.pathname === "/home" ||
+        location.pathname .startsWith("/item/") ||
+        location.pathname === "/chatList" ||
+        location.pathname === "/history/liked" ||
+        location.pathname === "/history/viewed"
+    ) {
         return (
             <footer className={styles.homeFooter}>
                 <Link to="/home" className={styles.item}>

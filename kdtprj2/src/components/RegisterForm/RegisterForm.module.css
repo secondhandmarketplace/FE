@@ -1,0 +1,122 @@
+.registerContainer {
+    display: flex;
+    flex: 1;
+    height: 660px;
+    margin-top: 65px;
+    flex-wrap: wrap;
+    gap: 35px;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+    overflow-y: auto;
+    padding: 50px 16px 30px;
+
+}
+
+.registerContainer input {
+    position: relative;
+    flex: 1;
+    width: 300px;
+    height: 45px;
+    border: 1px solid #a0c4ff;
+    border-radius: 10px;
+    text-indent: 10px;
+}
+
+.imageContainer {
+    border: 1px solid #a0c4ff;
+    border-radius: 10px;
+    padding: 20px 16px 8px;
+    width: 350px;
+    height: 200px;
+    overflow: auto;
+}
+
+.imageGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    cursor: pointer;
+}
+
+.imageBox {
+    display: flex;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border: 1px solid #a0c4ff;
+    background-color: rgba(160, 196, 255, 0.5);
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.imageBox img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.removeBtn {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #ff0099;
+    top: 5px;
+    right: 5px;
+}
+
+.addIcon {
+    font-size: 20px;
+    color: white;
+}
+
+.imageCount {
+    font-size: 13px;
+    color: #666;
+    text-align: right;
+    margin-top: 8px;
+}
+
+
+.label {
+    flex-shrink: 0;
+    width: 85px;
+    font-size: 14px;
+}
+
+.required {
+    color: red;
+    margin-right: 2px;
+}
+
+.textarea {
+    width: 350px;
+    height: 200px;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    border: none;
+    background: #eee;
+    resize: none;
+    outline: none;
+}
+
+.warning {
+    color: red;
+    font-size: 13px;
+    margin-top: -10px;
+}
+
+.registerButton {
+    background: #a0c4ff;
+    border: 1px solid #a0c4ff;
+    height: 45px;
+    width: 299px;
+    font-size: 14px;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 10px auto 24px;
+}
