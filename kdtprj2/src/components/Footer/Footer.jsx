@@ -11,7 +11,8 @@ function Footer() {
         location.pathname .startsWith("/item/") ||
         location.pathname === "/chatList" ||
         location.pathname === "/history/liked" ||
-        location.pathname === "/history/viewed"
+        location.pathname === "/history/viewed" ||
+        location.pathname === "/history/purchased"
     ) {
         return (
             <footer className={styles.homeFooter}>

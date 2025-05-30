@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import styles from "./RegisterForm.module.css";
 import { getUserId } from "../../utils/authUtils";
 
-function RegisterForm({ onSubmit }) {
+function RegisterForm({ onSubmit, initialItem, onSave }) {
     const [images, setImages] = useState([]);
     const [title, setTitle] = useState("");
     const [price, setPrice] = useState("");
@@ -29,18 +29,30 @@ function RegisterForm({ onSubmit }) {
 
         const tagArray = tag.split(" ").map(t => t.trim()).filter(t => t);
         const newItem = {
-            id: Date.now(),
+            id: initialItem ? initialItem.id : Date.now(),
             title,
             price: price === "" ? 0 : Number(price),
             tags: tagArray,
             description,
-            imageUrl: images[0]?.url,
-            status: "판매중",
+            imageUrl: images[0]?.url || initialItem?.imageUrl,
+            status: initialItem?.status || "판매중",
             OwnerId: getUserId(),
         };
 
-        onSubmit(newItem);
+        if (initialItem) {
+            onSave?.(newItem); // 수정
+        } else {
+            onSubmit?.(newItem); // 새로 등록
+        }
     };
+
+
+    useEffect(() => {
+        if (initialItem) {
+            setTitle(initialItem.title);
+            setPrice(initialItem.price);
+        }
+    }, [initialItem]);
 
     return (
         <form className={styles.registerContainer} onSubmit={handleSubmit}>
@@ -82,7 +94,7 @@ function RegisterForm({ onSubmit }) {
                     설명
                 </label>
                 <textarea className={styles.textarea} value={description} onChange={(e) => setDescription(e.target.value)} />
-            <button className={styles.registerButton} type="submit">등록하기</button>
+            <button className={styles.registerButton} type="submit">{ initialItem? "수정하기" : "등록하기"}</button>
         </form>
     );
 }

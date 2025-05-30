@@ -97,6 +97,15 @@ function Header({onSearchClick, onExitSearch}) {
         )
     }
 
+    if (location.pathname === "/history/purchased") {
+        return (
+            <header className={styles.Header}>
+                <button className={styles.backBtn} onClick={() => navigate(-1)}></button>
+                구매 내역
+            </header>
+        )
+    }
+
     return (
         <header className= {styles.basicHeader}>
             <h1>기본 헤더</h1>

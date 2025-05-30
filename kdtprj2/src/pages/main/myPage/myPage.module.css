@@ -10,33 +10,91 @@
 }
 
 .myPage {
-    background-color: #c144ff;
     display: flex;
     height: 620px;
     width: 100%;
-    margin-top: 65px;
+    margin-top: 55px;
     flex-direction: column;
     gap: 10px;
 
 }
 
-.infoBox {
-    background-color: #2da0ff;
+.inputBox {
+    /*background-color: #1fdfff;*/
     display: flex;
-    gap: 30px;
+    flex-direction: column;
+    align-items: flex-start;
+    overflow-y: auto;
+    height: 530px;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.inputRow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     height: 100px;
+}
+
+.addressBox {
+    /*background-color: #2da0ff;*/
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+
+
+.required {
+    color: red;
+    margin-right: 2px;
+}
+
+.inputBox label {
+    width: 110px;
+}
+
+
+.inputBox input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    width: 160px;
+}
+
+.inputBox button {
+    border: none;
+    background-color: #4f6cff;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* 정보 수정하기 누르기 전에 */
+
+.infoBox {
+    /*background-color: #2da0ff;*/
+    display: flex;
+    gap: 30px;
+    height: 90px;
+    align-items: center;
+    justify-content: center;
+    border-bottom: #1a1a1a solid 1px;
 
     button {
-        background-color: #0018b6;
+        /*background-color: #0018b6;*/
+        border: #1a1a1a solid 1px;
         height: 45px;
         width: 110px;
     }
 }
 
 .historyBox {
-    background-color: #9c0000;
+    /*background-color: #9c0000;*/
     height: 420px;
     display: flex;
     flex-direction: column;
@@ -47,71 +105,26 @@
         display: flex;
         align-items: center;
         height: 90px;
-        border: #1a1a1a solid 1px;
+        border-bottom: #1a1a1a solid 1px;
     }
 }
 
-.buttonBox {
-    background: #ff9900;
+/* 얘는 공통 */
+
+.btnBox {
+    position: absolute;
+    /*background: #ff9900;*/
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 30px;
-    height: 70px;
+    /*justify-content: center;*/
+    right: 50px;
+    bottom: 70px;
+    gap:50px;
+    height: 50px;
 
     button {
         width: 130px;
         border-radius: 10px;
+        border: #1a1a1a solid 1px;
     }
 }
-
-.editBox {
-    background-color: #ffca13;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 600px;
-}
-
-.inputBox {
-    background-color: #1fdfff;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    height: 520px;
-}
-
-.inputRow {
-    background-color: #ff9b9b;
-    display: flex;
-    flex: 1;
-    align-items: center;
-    gap: 10px;
-    height: 100px;
-}
-
-.inputRow label {
-    width: 110px;
-}
-
-.required {
-    color: red;
-    margin-right: 2px;
-}
-
-.inputRow input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    width: 160px;
-}
-
-.inputRow button {
-    border: none;
-    background-color: #4f6cff;
-    color: white;
-    border-radius: 10px;
-    cursor: pointer;
-}
-

@@ -1,0 +1,9 @@
+.container {
+    position: relative;
+    display: flex;
+    border: #1a1a1a solid 1px;
+    width: 410px;
+    height: 100vh;
+    overflow: hidden;
+    border-radius: 20px;
+}

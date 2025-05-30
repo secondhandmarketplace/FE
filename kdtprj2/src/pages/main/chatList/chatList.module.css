@@ -15,7 +15,7 @@
     margin-top: 75px;
     overflow-y: auto;
     flex-direction: column;
-    gap: 10px;
+    gap: 1px;
 }
 
 .chatRoom {
@@ -23,12 +23,12 @@
     background: #f4f4f4;
     border-bottom: #919191 solid 1px;
     border-top: #919191 solid 1px;
-    margin-top: 10px;
     gap: 20px;
-    max-height: 70px;
+    max-height: 100px;
     flex-direction: row;
-    padding: 0 10px;
+    padding:10px 10px;
 }
+
 .chatRoom:hover {
     background: #bcbcbc;
 }
@@ -46,16 +46,16 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    /*justify-content: flex-start;*/
     text-indent: 10px;
+    max-width: 200px;
 
 }
 
 .userName {
     display: flex;
-    align-items: center;
     color: #000000;
-    width: 100%;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: bold;
     height: 100%;
 }
@@ -63,17 +63,15 @@
 .lastMessage {
     background: none;
     display: flex;
-    font-size: 18px;
+    font-size: 16px;
     align-items: flex-end;
-    min-width: 200px;
-    height: 60px;
     color: #919191;
 }
 
 .time {
     background: none;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     font-size: 14px;
     width: 70px;
     color: #919191;

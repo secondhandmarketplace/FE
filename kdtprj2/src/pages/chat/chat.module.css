@@ -44,6 +44,19 @@
     height: 90px;
     object-fit: cover;
     /*border-radius: 50%;*/
+
+    button {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        right: 20px;
+        width: 90px;
+        height: 40px;
+        white-space: nowrap;
+        border: #000000 solid 1px;
+        border-radius: 10px;
+    }
 }
 
 .item {

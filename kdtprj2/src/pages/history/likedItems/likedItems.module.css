@@ -11,7 +11,7 @@
 .likedBox {
     display: flex;
     flex-direction: column;
-    background-color: #ffcf09;
+    /*background-color: #ffcf09;*/
     height: 600px;
     margin-top: 60px;
     width: 100%;
@@ -23,22 +23,23 @@
 .likedItem {
     display: flex;
     flex-direction: column;
-    background-color: #ff0000;
+    /*background-color: #ff0000;*/
     gap: 10px;
 }
 
 .item {
-    background: aqua;
+    /*background: aqua;*/
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: row;
     height: 100px;
-    gap: 10px;
+    gap: 7px;
 }
 
 .unlikeBtn {
     background: #ffcf09;
+    /*border: #ffcf09 solid 1px;*/
     width: 50px;
     height: 50px;
 }

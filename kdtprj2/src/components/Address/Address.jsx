@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState} from "react";
 
-const Address = ({onAddressSelected}) => {
+const Address = ({onAddressSelected, value}) => {
     const wrapRef = useRef(null);
     const [postcodeData, setPostcodeData] = useState({
         zonecode: "",
@@ -55,11 +55,8 @@ const Address = ({onAddressSelected}) => {
                 });
 
                 if (onAddressSelected) {
-                    onAddressSelected({
-                        zonecode: data.zonecode,
-                        address: addr,
-                        extraAddress: extraAddr,
-                    });
+                    const fullAddress = `${data.zonecode} ${addr}${extraAddr ? " " + extraAddr : ""} ${postcodeData.detailAddress}`;
+                    onAddressSelected(fullAddress);
                 }
 
                 wrapRef.current.style.display = 'none';
@@ -79,12 +76,21 @@ const Address = ({onAddressSelected}) => {
         <>
             <input type="text" value={postcodeData.zonecode} placeholder="우편번호" readOnly/>
             <input type="button" onClick={execDaumPostcode} value="우편번호 찾기"/><br/>
-            <input type="text" value={postcodeData.address} placeholder="주소"/><br/>
+            <input type="text" value={value || postcodeData.address} placeholder="주소" readOnly/><br/>
             <input
                 type="text"
-                onChange={(e) => setPostcodeData({...postcodeData, detailAddress: e.target.value})}
-                placeholder="상세주소"/>
-            <input type="text" value={postcodeData.extraAddress} placeholder="참고항목"/>
+                value={postcodeData.detailAddress}
+                placeholder="상세주소"
+                onChange={(e) => {
+                    const updated = {...postcodeData, detailAddress: e.target.value};
+                    setPostcodeData(updated);
+                    if (onAddressSelected) {
+                        const fullAddress = `${updated.zonecode} ${updated.address}${updated.extraAddress ? " " + updated.extraAddress : ""} ${updated.detailAddress}`;
+                        onAddressSelected(fullAddress);
+                    }
+                }}
+            />
+            <input type="text" value={postcodeData.extraAddress} placeholder="참고항목" readOnly/>
 
             <div ref={wrapRef}
                  style={{

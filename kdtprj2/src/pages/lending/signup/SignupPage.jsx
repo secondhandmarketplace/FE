@@ -17,8 +17,12 @@ function SignupPage() {
         setForm({ ...form, [e.target.name]: e.target.value });
     }
 
-    const handleAddress = (data) => {
-        console.log("ㅅㅓㄴ택한 주소: ",data);
+    const handleAddress = (fullAddress) => {
+        setForm((prev) => ({
+            ...prev,
+            address: fullAddress,
+        }));
+        console.log("ㅅㅓㄴ택한 주소: ",fullAddress);
     }
 
     return (
@@ -95,7 +99,7 @@ function SignupPage() {
                                 required
                             />
 
-                            <Address onAddressSelected={handleAddress} />
+                            <Address value={form.address} onAddressSelected={handleAddress} />
                         </div>
 
                     </div>

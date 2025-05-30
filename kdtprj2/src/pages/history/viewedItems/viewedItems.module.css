@@ -9,7 +9,7 @@
 }
 
 .viewedBox {
-    background-color: #00ff16;
+    /*background-color: #00ff16;*/
     flex: 1;
     display: flex;
     overflow-y: auto;
@@ -20,8 +20,9 @@
 }
 
 .item {
-    background-color: #ad00c6;
+    /*background-color: #ad00c6;*/
     display: flex;
+    align-items: center;
     flex-direction: column;
 }
 

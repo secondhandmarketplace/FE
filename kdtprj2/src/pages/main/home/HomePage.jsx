@@ -119,7 +119,9 @@ function HomePage() {
                                     </div>
                                 ) : (
                                     filteredItems.map((item) => (
-                                        <ItemCard key={item.id} item={item} />
+                                        <div className={`${item.status === "거래완료" ? styles.disabled : ""}`}>
+                                            <ItemCard key={item.id} item={item} />
+                                        </div>
                                     ))
                                 )}
                             </div>
