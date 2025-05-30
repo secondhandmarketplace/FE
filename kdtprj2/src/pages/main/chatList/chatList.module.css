@@ -1,78 +1,75 @@
 .container {
-    display: flex;
-    position: relative;
-    border: #1a1a1a solid 1px;
-    width: 410px;
-    height: 100vh;
-    overflow: hidden;
-    border-radius: 20px;;
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .chatList {
-    display: flex;
-    height: 580px;
-    width: 100%;
-    margin-top: 75px;
-    overflow-y: auto;
-    flex-direction: column;
-    gap: 1px;
+  display: flex;
+  height: 580px;
+  width: 100%;
+  margin-top: 75px;
+  overflow-y: auto;
+  flex-direction: column;
+  gap: 1px;
 }
 
 .chatRoom {
-    display: flex;
-    background: #f4f4f4;
-    border-bottom: #919191 solid 1px;
-    border-top: #919191 solid 1px;
-    gap: 20px;
-    max-height: 100px;
-    flex-direction: row;
-    padding:10px 10px;
+  display: flex;
+  background: #f4f4f4;
+  border-bottom: #919191 solid 1px;
+  border-top: #919191 solid 1px;
+  gap: 20px;
+  max-height: 100px;
+  flex-direction: row;
+  padding: 10px 10px;
 }
 
 .chatRoom:hover {
-    background: #bcbcbc;
+  background: #bcbcbc;
 }
 
 .mainImage {
-    background: #ed2800;
-    width: 70px;
-    height: 70px;
-    object-fit: cover;
-    border-radius: 15px;
+  background: #ed2800;
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 15px;
 }
 
 .chatBox {
-    flex: 1;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    /*justify-content: flex-start;*/
-    text-indent: 10px;
-    max-width: 200px;
-
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  /*justify-content: flex-start;*/
+  text-indent: 10px;
+  max-width: 200px;
 }
 
 .userName {
-    display: flex;
-    color: #000000;
-    font-size: 16px;
-    font-weight: bold;
-    height: 100%;
+  display: flex;
+  color: #000000;
+  font-size: 16px;
+  font-weight: bold;
+  height: 100%;
 }
 
 .lastMessage {
-    background: none;
-    display: flex;
-    font-size: 16px;
-    align-items: flex-end;
-    color: #919191;
+  background: none;
+  display: flex;
+  font-size: 16px;
+  align-items: flex-end;
+  color: #919191;
 }
 
 .time {
-    background: none;
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    width: 70px;
-    color: #919191;
+  background: none;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  width: 70px;
+  color: #919191;
 }

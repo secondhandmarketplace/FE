@@ -1,145 +1,172 @@
-import React, {useRef, useState} from "react";
-import Header from "../../../components/Header/Header.jsx";
-import Footer from "../../../components/Footer/Footer.jsx";
+import React, { useState } from "react";
 import styles from "./MyPage.module.css";
-import {Link} from "react-router-dom";
-import { handleSave } from "../../../utils/handleSave.js";
-import {useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Modal from "../../../components/Modal/Modal.jsx";
-import {getUserId} from "../../../utils/authUtils.js";
-import Address from "../../../components/Address/Address.jsx";
+import { getUserId } from "../../../utils/authUtils.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronLeft,
+  faChevronRight,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
+import Footer from "../../../components/Footer/Footer.jsx";
 
 function MyPage() {
-    const navigate = useNavigate();
-    const [isEditing, setIsEditing] = useState(false);
-    const containerRef = useRef(null);
-    const [isOpen, setIsOpen] = useState(false);
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [nickname, setNickname] = useState("");
-    const [phone, setPhone] = useState("");
-    const [address, setAddress] = useState("");
-    const userId = getUserId();
+  const navigate = useNavigate();
+  const [isEditing, setIsEditing] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [nickname, setNickname] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const userId = getUserId();
 
-    return (
-        <div className={styles.container} ref={containerRef}>
-            <Header />
-            <>
-                <div className={styles.myPage}>
-                    {isEditing ? (
-                        <>
-                            <div className={styles.inputBox}>
-                                <div className={styles.inputRow}>
-                                    <label>
-                                        <span className={styles.required}>*</span>
-                                        비밀번호 수정
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={password}
-                                        onChange={e => setPassword(e.target.value)}
-                                        placeholder="비밀번호를 입력하세요"/>
-                                </div>
+  // 임시 정보 (실제 정보로 대체)
+  const user = {
+    nickname: "user1",
+    school: "삼육대학교",
+    phone: "010-0000-0000",
+    address: "서울시 임시주소",
+  };
 
-                                <div className={styles.inputRow}>
-                                    <label>
-                                        <span className={styles.required}>*</span>
-                                        비밀번호 확인
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={confirmPassword}
-                                        onChange={e => setConfirmPassword(e.target.value)}
-                                        placeholder="비밀번호를 다시 입력하세요"/>
-                                </div>
+  return (
+    <div className={styles.container}>
+      <div className={styles["profile-topbar"]}>
+        <button className={styles["back-button"]} onClick={() => navigate(-1)}>
+          <FontAwesomeIcon
+            icon={faChevronLeft}
+            className={styles["back-icon"]}
+          />
+        </button>
+        <span className={styles["topbar-title"]}>마이페이지</span>
+      </div>
 
-                                <div className={styles.inputRow}>
-                                    <label>
-                                        <span className={styles.required}>*</span>
-                                        닉네임 수정
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={nickname}
-                                        onChange={e => setNickname(e.target.value)}
-                                        placeholder="닉네임을 입력하세요"/>
-                                </div>
+      {!isEditing ? (
+        <>
+          <div className={styles["profile-info"]}>
+            <div className={styles["profile-avatar"]}>
+              <FontAwesomeIcon
+                icon={faUser}
+                className={styles["avatar-icon"]}
+              />
+            </div>
+            <div className={styles["profile-name"]}>{user.nickname}</div>
+            <div>{user.school}</div>
+            <button
+              className={styles["edit-profile-button"]}
+              onClick={() => setIsEditing(true)}>
+              프로필 수정
+            </button>
+          </div>
 
-                                <div className={styles.inputRow}>
-                                    <label>
-                                        <span className={styles.required}>*</span>
-                                        연락처 수정
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={phone}
-                                        onChange={e => setPhone(e.target.value)}
-                                        placeholder="연락처를 입력하세요"/>
-                                    <button>중복 확인</button>
-                                </div>
-                                <div className={styles.addressBox}>
-                                    <label>
-                                        <span className={styles.required}>*</span>
-                                        주소 수정
-                                    </label>
-                                    <Address value={address}
-                                             onAddressSelected={setAddress}/>
-                                </div>
-                            </div>
-                            <div className={styles.btnBox}>
-                                <button
-                                    onClick={() => handleSave({
-                                        password,
-                                        confirmPassword,
-                                        nickname,
-                                        phone,
-                                        address,
-                                        setIsEditing
-                                    })}>
-                                    저장
-                                </button>
-                                <button onClick={() => setIsEditing(false)}>취소</button>
-                            </div>
-                        </>
-                    ) : (
-                        <>
-                            <div className={styles.infoBox}>
-                                회원 정보(닉네임,학교명)
-                                <button onClick={() => setIsEditing(true)}>수정하기</button>
-                            </div>
+          <div className={styles["profile-menu"]}>
+            <div className={styles["menu-item"]}>
+              <Link to="/history/viewed" className={styles["menu-link"]}>
+                상품 조회 내역
+              </Link>
+              <FontAwesomeIcon
+                icon={faChevronRight}
+                className={styles["menu-arrow"]}
+              />
+            </div>
+            <div className={styles["menu-item"]}>
+              <Link to="/history/liked" className={styles["menu-link"]}>
+                찜 목록
+              </Link>
+              <FontAwesomeIcon
+                icon={faChevronRight}
+                className={styles["menu-arrow"]}
+              />
+            </div>
+            <div className={styles["menu-item"]}>
+              <Link to="/history/sales" className={styles["menu-link"]}>
+                판매 내역
+              </Link>
+              <FontAwesomeIcon
+                icon={faChevronRight}
+                className={styles["menu-arrow"]}
+              />
+            </div>
+            <div className={styles["menu-item"]}>
+              <Link to="/history/purchased" className={styles["menu-link"]}>
+                구매 내역
+              </Link>
+              <FontAwesomeIcon
+                icon={faChevronRight}
+                className={styles["menu-arrow"]}
+              />
+            </div>
+          </div>
 
-                            <div className={styles.historyBox}>
-                                <Link to="/history/viewed" className={styles.historyItem}>상품 조회 내역</Link>
-                                <Link to="/history/liked" className={styles.historyItem}>찜 목록</Link>
-                                <Link to="/history/sales" className={styles.historyItem}>판매 내역</Link>
-                                <Link to="/history/purchased" className={styles.historyItem}>구매 내역</Link>
-                            </div>
+          <div className={styles["profile-actions"]}>
+            <button
+              className={styles["logout-btn"]}
+              onClick={() => navigate("/login")}>
+              로그아웃
+            </button>
+            <button
+              className={styles["withdraw-btn"]}
+              onClick={() => setIsOpen(true)}>
+              회원탈퇴
+            </button>
+          </div>
+        </>
+      ) : (
+        <form
+          className={styles["edit-form"]}
+          onSubmit={(e) => {
+            e.preventDefault();
+            setIsEditing(false);
+          }}>
+          <div className={styles["edit-row"]}>
+            <label className={styles["edit-label"]}>닉네임</label>
+            <input
+              className={styles["edit-input"]}
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+            />
+          </div>
+          <div className={styles["edit-row"]}>
+            <label className={styles["edit-label"]}>연락처</label>
+            <input
+              className={styles["edit-input"]}
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+          </div>
+          <div className={styles["edit-row"]}>
+            <label className={styles["edit-label"]}>주소</label>
+            <input
+              className={styles["edit-input"]}
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+            />
+          </div>
+          <div className={styles["edit-btn-row"]}>
+            <button type="submit" className={styles["edit-btn"]}>
+              저장
+            </button>
+            <button
+              type="button"
+              className={`${styles["edit-btn"]} ${styles["cancel"]}`}
+              onClick={() => setIsEditing(false)}>
+              취소
+            </button>
+          </div>
+        </form>
+      )}
 
-                            <div className={styles.btnBox}>
-                                <button onClick={() => navigate("/login")}>로그아웃</button>
-                                <button onClick={()=> setIsOpen(true)}>회원탈퇴</button>
-                            </div>
-                        </>
-                    )}
-                </div>
-            </>
-            {isOpen && (
-                <Modal
-                    onConfirm={() => {
-                        localStorage.removeItem("user");
-
-                        const allItems = JSON.parse(localStorage.getItem("items") || "[]");
-                        const filteredItems = allItems.filter(item => item.OwnerId !== userId);
-                        localStorage.setItem("items", JSON.stringify(filteredItems));
-
-                        navigate("/login");
-                    }}
-                    onCancel={() => setIsOpen(false)}
-                />
-            )}
-            <Footer />
-        </div>
-    )
+      {isOpen && (
+        <Modal
+          onConfirm={() => {
+            localStorage.removeItem("userId");
+            // 기타 데이터 정리
+            navigate("/login");
+          }}
+          onCancel={() => setIsOpen(false)}
+        />
+      )}
+    </div>
+  );
 }
 
 export default MyPage;

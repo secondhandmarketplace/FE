@@ -4,15 +4,13 @@ import Header from "../../../components/Header/Header.jsx";
 import Footer from "../../../components/Footer/Footer.jsx";
 
 function PurchaseItemsPage() {
-    return (
-        <div className={styles.container}>
-            <Header/>
-            <div>
-
-            </div>
-            <Footer/>
-        </div>
-    )
+  return (
+    <div className={styles.container}>
+      <Header />
+      <div></div>
+      <Footer />
+    </div>
+  );
 }
 
 export default PurchaseItemsPage;
