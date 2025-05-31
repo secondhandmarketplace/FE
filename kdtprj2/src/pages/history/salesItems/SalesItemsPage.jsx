@@ -82,7 +82,7 @@ function SalesItemsPage() {
                   }`}
                   onClick={() => {
                     if (item.status !== "거래완료") {
-                      navigate("/itemDetail", { state: item });
+                      navigate("/item/:id", { state: item });
                     }
                   }}>
                   <ItemCard item={item} />

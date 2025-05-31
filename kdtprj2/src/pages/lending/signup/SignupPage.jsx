@@ -35,23 +35,25 @@ function SignupPage() {
                 }}>
                     <div className={styles.labeledBox}>
                         <span className={styles.boxLabel}>대학생 인증</span>
-                        <div className={styles.authContainer}>
-                            <input
-                                type="text"
-                                name="school"
-                                placeholder="학교명을 입력하세요."
-                                value={form.school}
-                                onChange={handleChange}
-                            />
-                            {/* 인증할 줄 몰라서 비활성화 */}
-                            <button type="button" disabled>인증</button>
+                        <div className={styles["info-input-box"]}>
+                            <div className={styles["input-row"]}>
+                                <input
+                                    type="text"
+                                    name="school"
+                                    placeholder="학교명을 입력하세요."
+                                    value={form.school}
+                                    onChange={handleChange}
+                                />
+                                {/* 인증할 줄 몰라서 비활성화 */}
+                                <button type="button" disabled>인증</button>
+                            </div>
                         </div>
                     </div>
 
                     <div className={styles.labeledBox}>
                         <span className={styles.boxLabel}>회원 정보 입력</span>
-                        <div className={styles.inputContainer}>
-                            <div className={styles.inputRow}>
+                        <div className={styles["info-input-box"]}>
+                            <div className={styles["input-row"]}>
                                 <input
                                     type="text"
                                     name="email"
@@ -80,7 +82,7 @@ function SignupPage() {
                                 required
                             />
 
-                            <div className={styles.inputRow}>
+                            <div className={styles["input-row"]}>
                                 <input
                                     name="nickname"
                                     placeholder="닉네임을 입력하세요"
@@ -105,18 +107,16 @@ function SignupPage() {
                     </div>
                     {message && <div className={styles.message}>{message}</div>}
                     {userId && <div className={styles.userId}>발급된 userId: {userId}</div>}
-
-                    <div className={styles.signupFooter}>
-                        <button
-                            type="submit"
-                            className={`${styles.signupBtn} ${!isSignupFormValid(form) ? styles.disabled : ""}`}
-                            disabled = {!isSignupFormValid(form)}
-                        >
-                            회원가입하기
-                        </button>
-                    </div>
                 </form>
-
+                <div className={styles.signupFooter}>
+                    <button
+                        type="submit"
+                        className={`${styles.signupBtn} ${!isSignupFormValid(form) ? styles.disabled : ""}`}
+                        disabled = {!isSignupFormValid(form)}
+                    >
+                        회원가입하기
+                    </button>
+                </div>
             </div>
         </>
     )

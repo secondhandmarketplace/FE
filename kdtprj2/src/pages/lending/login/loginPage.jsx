@@ -49,11 +49,11 @@ function LoginPage() {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                    <div className={styles.btnContainer}>
+                    <div className={styles["login-btn-row"]}>
                         <button className={styles.signUp} onClick={() => navigate("/signup")}>회원가입</button>
                         <button className={styles.forgotPW} onClick={() => navigate("/forgot")}>비밀번호 찾기</button>
                     </div>
-                    <button type="submit" className={styles.loginBtn}> 로그인 </button>
+                    <button type="submit" className={styles["login-btn"]}> 로그인 </button>
                 </form>
             </div>
         </>
