@@ -82,10 +82,10 @@ function SalesItemsPage() {
                   }`}
                   onClick={() => {
                     if (item.status !== "거래완료") {
-                      navigate("/item/:id", { state: item });
+                      navigate(`/item/${item.id}`, { state: item });
                     }
                   }}>
-                  <ItemCard item={item} />
+                  <ItemCard item={item} hideCompleted={false} />
                   {item.status !== "거래완료" && (
                     <div className={styles.btnRow}>
                       <button

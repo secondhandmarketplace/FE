@@ -121,7 +121,7 @@ function ItemDetailPage() {
           <div className={styles["related-title"]}>연관된 상품</div>
           {relatedItems.length > 0 ? (
             relatedItems.map((related) => (
-              <ItemCard key={related.id} item={related} />
+              <ItemCard key={related.id} item={related} hideCompleted={true}/>
             ))
           ) : (
             <div className={styles.noRelated}>관련 상품이 없습니다.</div>

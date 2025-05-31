@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import styles from "./ItemCard.module.css";
 import Tag from "../Tag/Tag";
 
-function ItemCard({ item }) {
+function ItemCard({ item, hideCompleted = true }) {
   const navigate = useNavigate();
 
   // 거래완료 상품은 렌더링하지 않음
-  if (item.status === "거래완료") return null;
+  if (hideCompleted && item.status === "거래완료") return null;
 
   const handleClick = () => {
     const viewed = JSON.parse(localStorage.getItem("viewedItems") || "[]");
