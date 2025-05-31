@@ -8,6 +8,7 @@ function RegisterForm({ onSubmit, initialItem, onSave }) {
     const [price, setPrice] = useState("");
     const [tag, setTag] = useState("");
     const [description, setDescription] = useState("");
+    const [condition, setCondition] = useState("");
 
     const isTitleOver = title.length > 20;
 
@@ -33,6 +34,7 @@ function RegisterForm({ onSubmit, initialItem, onSave }) {
             title,
             price: price === "" ? 0 : Number(price),
             tags: tagArray,
+            value: condition,
             description,
             imageUrl: images[0]?.url || initialItem?.imageUrl,
             status: initialItem?.status || "판매중",
@@ -88,6 +90,33 @@ function RegisterForm({ onSubmit, initialItem, onSave }) {
                     태그
                 </label>
                 <input value={tag} onChange={(e) => setTag(e.target.value)} />
+
+                <label className={styles.label}>
+                    <span className={styles.required}>*</span>
+                    사용감
+                </label>
+                <div className={styles["condition-box"]} onChange={(e) => setCondition(e.target.value)}>
+                    <label className={styles["radio-btn"]}>
+                        <input type="radio" name="condition" value="S" checked={condition === "S"} />
+                        <span>S-미개봉/새상품</span>
+                    </label>
+                    <label className={styles["radio-btn"]}>
+                        <input type="radio" name="condition" value="A" checked={condition === "A"} />
+                        <span>A-거의 새상품</span>
+                    </label>
+                    <label className={styles["radio-btn"]}>
+                        <input type="radio" name="condition" value="B" checked={condition === "B"} />
+                        <span>B-사용감 적음</span>
+                    </label>
+                    <label className={styles["radio-btn"]}>
+                        <input type="radio" name="condition" value="C" checked={condition === "C"} />
+                        <span>C-사용감 있음</span>
+                    </label>
+                    <label className={styles["radio-btn"]}>
+                        <input type="radio" name="condition" value="D" checked={condition === "D"} />
+                        <span>D-사용감 많음/하자 있음</span>
+                    </label>
+                </div>
 
                 <label className={styles.label}>
                     <span className={styles.required}>*</span>

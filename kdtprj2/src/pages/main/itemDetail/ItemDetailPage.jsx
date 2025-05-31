@@ -100,10 +100,11 @@ function ItemDetailPage() {
           <span className={styles["seller-name"]}>학생1</span>
         </div>
 
-        {/* 제목/가격/설명 */}
+        {/* 제목/가격/설명/사용감 */}
         <div className={styles["item-title"]}>{item.title}</div>
         <div className={styles.price}>{item.price.toLocaleString()}원</div>
         <div className={styles["description-text"]}>{item.description}</div>
+        <div className={styles["item-condition"]}>{item.value}</div>
         <div className={styles["info-row"]}>
           <span>거래 장소: {item.place || "미정"}</span>
           <span>태그: {item.tags.join(", ")}</span>
