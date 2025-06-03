@@ -100,7 +100,7 @@ function MyPage() {
           <div className={styles["profile-actions"]}>
             <button
               className={styles["logout-btn"]}
-              onClick={() => navigate("/login")}>
+              onClick={() => navigate("/")}>
               로그아웃
             </button>
             <button

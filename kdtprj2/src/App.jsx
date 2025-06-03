@@ -1,13 +1,12 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
-
+import AllRoutes from "./Route/Route";
 import "./App.css";
 
 function App() {
   return (
     <div>
       <main>
-        <Outlet />
+        <AllRoutes />
       </main>
     </div>
   );

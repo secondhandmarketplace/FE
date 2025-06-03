@@ -161,6 +161,12 @@
   overflow-wrap: break-word;
 }
 
+.item-condition {
+  color: #000000;
+  font-size: 18px;
+  font-weight: bold;
+}
+
 .info-row {
   display: flex;
   justify-content: space-between;
