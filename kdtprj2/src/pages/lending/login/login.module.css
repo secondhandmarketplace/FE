@@ -74,3 +74,34 @@
   outline: none;
 }
 
+.errorMessage {
+  background: #ffe6e6;
+  color: #d63031;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  border-left: 4px solid #d63031;
+  font-size: 14px;
+  text-align: center;
+}
+
+.enterID:disabled,
+.enterPW:disabled,
+.signUp:disabled,
+.forgotPW:disabled,
+.login-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login-btn:disabled {
+  background: #ccc;
+}
+
+.login-btn {
+  transition: background-color 0.2s ease;
+}
+
+.login-btn:hover:not(:disabled) {
+  background: #4a90e2;
+}
