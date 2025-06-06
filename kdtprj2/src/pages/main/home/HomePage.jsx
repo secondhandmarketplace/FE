@@ -77,7 +77,6 @@ function HomePage() {
 
   const homeContainerRef = useRef(null);
 
-  // 백엔드에서 아이템 데이터 가져오기 (axios 사용)
   const fetchItems = async () => {
     try {
       setLoading(true);
@@ -87,12 +86,11 @@ function HomePage() {
       const response = await api.get("/items");
       console.log("API 응답:", response.data);
 
-      // 백엔드 데이터를 프론트엔드 형식에 맞게 변환
       const transformedItems = response.data.map((item) => ({
         id: item.itemid || item.id,
         title: item.title || "제목 없음",
         price: item.price || 0,
-        imageUrl: getImageUrl(item), // ✅ 개선된 이미지 URL 처리
+        imageUrl: getImageUrl(item),
         tags: item.tags || [],
         condition: item.value || item.condition || "상태 없음",
         status: item.status || "판매중",
@@ -102,30 +100,24 @@ function HomePage() {
         seller: item.seller,
       }));
 
-      console.log("변환된 아이템:", transformedItems);
-      setItems(transformedItems);
+      // ✅ 프론트엔드에서 최근 등록순으로 정렬
+      const sortedItems = transformedItems.sort((a, b) => {
+        const dateA = new Date(a.regdate);
+        const dateB = new Date(b.regdate);
+        return dateB - dateA; // 내림차순 (최신순)
+      });
+
+      console.log("정렬된 아이템 (최근 등록순):", sortedItems);
+      console.log(
+        "첫 번째 아이템:",
+        sortedItems[0]?.title,
+        sortedItems[0]?.regdate
+      );
+
+      setItems(sortedItems);
     } catch (err) {
       console.error("아이템 조회 실패:", err);
-
-      if (err.response) {
-        console.error("응답 상태:", err.response.status);
-        console.error("응답 데이터:", err.response.data);
-        setError(
-          `서버 오류 (${err.response.status}): ${
-            err.response.data?.message || "알 수 없는 오류"
-          }`
-        );
-      } else if (err.code === "ERR_NETWORK") {
-        setError(
-          "네트워크 연결을 확인해주세요. CORS 설정이 필요할 수 있습니다."
-        );
-      } else {
-        setError(err.message || "데이터를 불러오는데 실패했습니다.");
-      }
-
-      // 에러 시 localStorage 백업 데이터 사용
-      const savedItems = JSON.parse(localStorage.getItem("items") || "[]");
-      setItems(savedItems);
+      // 에러 처리...
     } finally {
       setLoading(false);
     }
