@@ -133,7 +133,7 @@ function SignupPage() {
         ...prev,
         userid: "올바른 아이디를 입력해주세요.",
       }));
-      return;
+      return false;
     }
 
     setCheckingDuplicate((prev) => ({ ...prev, userid: true }));
@@ -141,16 +141,17 @@ function SignupPage() {
     try {
       const response = await api.get(`/auth/check-userid/${formData.userid}`);
 
-      if (response.data.available) {
-        setValidations((prev) => ({ ...prev, userid: true }));
-        setErrors((prev) => ({ ...prev, userid: "" }));
-        alert("사용 가능한 아이디입니다.");
-      } else {
+      if (response.data.exists) {
         setValidations((prev) => ({ ...prev, userid: false }));
+        setErrors((prev) => ({ ...prev, userid: "이미 사용중인 아이디 입니다." }));
+        return false;
+      } else {
+        setValidations((prev) => ({ ...prev, userid: true }));
         setErrors((prev) => ({
           ...prev,
-          userid: "이미 사용중인 아이디입니다.",
+          userid: "",
         }));
+        return true;
       }
     } catch (err) {
       console.error("아이디 중복 확인 실패:", err);
@@ -158,6 +159,8 @@ function SignupPage() {
         ...prev,
         userid: "아이디 중복 확인 중 오류가 발생했습니다.",
       }));
+      setValidations((prev) => ({ ...prev, userid: false }));
+      return false;
     } finally {
       setCheckingDuplicate((prev) => ({ ...prev, userid: false }));
     }
@@ -170,7 +173,7 @@ function SignupPage() {
         ...prev,
         email: "올바른 이메일을 입력해주세요.",
       }));
-      return;
+      return false;
     }
 
     setCheckingDuplicate((prev) => ({ ...prev, email: true }));
@@ -180,16 +183,17 @@ function SignupPage() {
         `/auth/check-email/${encodeURIComponent(formData.email)}`
       );
 
-      if (response.data.available) {
-        setValidations((prev) => ({ ...prev, email: true }));
-        setErrors((prev) => ({ ...prev, email: "" }));
-        alert("사용 가능한 이메일입니다.");
-      } else {
+      if (response.data.exists) {
         setValidations((prev) => ({ ...prev, email: false }));
+        setErrors((prev) => ({ ...prev, email: "이미 사용중인 이메일입니다." }));
+        return false;
+      } else {
+        setValidations((prev) => ({ ...prev, email: true }));
         setErrors((prev) => ({
           ...prev,
-          email: "이미 사용중인 이메일입니다.",
+          email: "",
         }));
+        return true;
       }
     } catch (err) {
       console.error("이메일 중복 확인 실패:", err);
@@ -197,6 +201,8 @@ function SignupPage() {
         ...prev,
         email: "이메일 중복 확인 중 오류가 발생했습니다.",
       }));
+      setValidations((prev) => ({ ...prev, email: false }));
+      return false;
     } finally {
       setCheckingDuplicate((prev) => ({ ...prev, email: false }));
     }
