@@ -20,14 +20,6 @@ function MyPage() {
   const [address, setAddress] = useState("");
   const userId = getUserId();
 
-  // 임시 정보 (실제 정보로 대체)
-  const user = {
-    nickname: "user1",
-    school: "삼육대학교",
-    phone: "010-0000-0000",
-    address: "서울시 임시주소",
-  };
-
   return (
     <div className={styles.container}>
       <div className={styles["profile-topbar"]}>

@@ -58,7 +58,7 @@
   border-radius: 4px;
 }
 
-.login-btn {
+.loginbtn {
   background-color: #a0c4ff;
   width: 280px;
   margin: 50px auto;
@@ -69,7 +69,7 @@
   cursor: pointer;
 }
 
-.login-btn:hover {
+.loginbtn:hover {
   background: #a0c4ff;
   outline: none;
 }
@@ -89,19 +89,19 @@
 .enterPW:disabled,
 .signUp:disabled,
 .forgotPW:disabled,
-.login-btn:disabled {
+.loginbtn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.login-btn:disabled {
+.loginbtn:disabled {
   background: #ccc;
 }
 
-.login-btn {
+.loginbtn {
   transition: background-color 0.2s ease;
 }
 
-.login-btn:hover:not(:disabled) {
+.loginbtn:hover:not(:disabled) {
   background: #4a90e2;
 }
