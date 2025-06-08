@@ -221,7 +221,7 @@ const LoginPage = () => {
           <button
             type="button"
             className={styles.signUp}
-            onClick={() => navigate("/register")}
+            onClick={() => navigate("/signup")}
             disabled={loading}>
             회원가입
           </button>
