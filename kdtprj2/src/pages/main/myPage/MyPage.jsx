@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import styles from "./MyPage.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import Modal from "../../../components/Modal/Modal.jsx";
-import { getUserid, getUserInfo } from "../../../utils/authUtils.js";
+import { getUserId, getUserInfo } from "../../../utils/authUtils.js";
+import { clearAuth } from "../../../utils/authUtils.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
@@ -102,7 +103,10 @@ function MyPage() {
           <div className={styles["profile-actions"]}>
             <button
               className={styles["logout-btn"]}
-              onClick={() => navigate("/")}>
+              onClick={() => {
+                clearAuth();
+                navigate("/");
+              }}>
               로그아웃
             </button>
             <button
@@ -155,7 +159,7 @@ function MyPage() {
         />
       )}
 
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

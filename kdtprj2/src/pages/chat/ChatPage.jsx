@@ -17,7 +17,7 @@ const api = axios.create({
 });
 
 const ChatPage = () => {
-  const userId = getUserId();
+  const Userid = getUserId();
   const navigate = useNavigate();
   const location = useLocation();
   const item = location.state;
@@ -25,20 +25,20 @@ const ChatPage = () => {
   const [loading, setLoading] = useState(true);
 
   // ✅ 채팅방 생성 검증 함수 정의 (누락된 함수 추가)
-  const createChatRoomWithValidation = async (userId, otherUserId, itemId) => {
+  const createChatRoomWithValidation = async (Userid, otherUserid, itemId) => {
     try {
       // ✅ 최종 검증
-      if (!userId || !otherUserId || !itemId) {
+      if (!Userid || !otherUserid || !itemId) {
         throw new Error("필수 파라미터 누락");
       }
 
-      if (userId === otherUserId) {
+      if (Userid === otherUserid) {
         throw new Error("자기 자신과는 채팅할 수 없습니다");
       }
 
       const requestData = {
-        userId: String(userId),
-        otherUserId: String(otherUserId),
+        Userid: String(Userid),
+        otherUserid: String(otherUserid),
         itemId: Number(itemId),
       };
 
@@ -66,7 +66,7 @@ const ChatPage = () => {
 
       const response = await api.put(`/items/${itemId}/status`, {
         status: newStatus,
-        userId: userId,
+        Userid: Userid,
       });
 
       if (response.data.success) {
@@ -106,8 +106,8 @@ const ChatPage = () => {
   // ✅ 채팅방 생성 또는 조회 (대화형 인공지능 지원)
   useEffect(() => {
     const initializeChatRoom = async () => {
-      if (!item || !userId) {
-        console.warn("필수 데이터 누락:", { item, userId });
+      if (!item || !Userid) {
+        console.warn("필수 데이터 누락:", { item, Userid });
         setLoading(false);
         return;
       }
@@ -115,18 +115,12 @@ const ChatPage = () => {
       try {
         setLoading(true);
 
-        // ✅ 다중 필드 검증 (검색 결과 [2], [3], [4] 해결)
-        const otherUserId =
-          item.OwnerId ||
-          item.sellerId ||
-          item.sellerUserid ||
-          item.seller?.userid ||
-          item.seller?.id;
+        const otherUserid = item.sellerId;
 
         console.log("채팅방 초기화 - 판매자 ID 검증:", {
           itemId: item.id,
-          userId: userId,
-          otherUserId: otherUserId,
+          Userid: Userid,
+          otherUserid: otherUserid,
           allSellerFields: {
             OwnerId: item.OwnerId,
             sellerId: item.sellerId,
@@ -135,18 +129,12 @@ const ChatPage = () => {
           },
         });
 
-        // ✅ 판매자 정보 최종 검증
-        if (
-          !otherUserId ||
-          otherUserId === "undefined" ||
-          otherUserId === "unknown" ||
-          otherUserId === userId
-        ) {
-          throw new Error(`유효하지 않은 판매자 정보: ${otherUserId}`);
+        if (!otherUserid || otherUserid === Userid) {
+          throw new Error(`유효하지 않은 판매자 정보: ${otherUserid}`);
         }
 
         // ✅ 채팅방 생성
-        await createChatRoomWithValidation(userId, otherUserId, item.id);
+        await createChatRoomWithValidation(Userid, otherUserid, item.id);
       } catch (error) {
         console.error("채팅방 초기화 실패:", error);
 
@@ -183,7 +171,7 @@ const ChatPage = () => {
     };
 
     initializeChatRoom();
-  }, [item, userId, navigate]);
+  }, [item, Userid, navigate]);
 
   if (loading) {
     return (
@@ -222,7 +210,7 @@ const ChatPage = () => {
                 e.target.src = "/assets/default-image.png";
               }}
             />
-            {item.OwnerId === userId && (
+            {item.OwnerId === Userid && (
               <button
                 onClick={() => handleStatus(item.id, "거래완료")}
                 className={styles.tradeButton}>
@@ -241,7 +229,7 @@ const ChatPage = () => {
         <ChatWindow
           roomId={chatRoom?.roomId || chatRoom?.id}
           itemId={item.id}
-          otherUserId={item.OwnerId}
+          otherUserid={item.OwnerId}
         />
       </div>
     </div>

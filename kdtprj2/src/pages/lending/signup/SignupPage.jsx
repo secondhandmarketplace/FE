@@ -149,9 +149,9 @@ function SignupPage() {
             </button>
           </div>
         </form>
-        <div className={styles.signupFooter}>
+        {/* <div className={styles.signupFooter}>
           <span>이용약관 | 개인정보처리방침</span>
-        </div>
+        </div> */}
       </div>
     </div>
   );

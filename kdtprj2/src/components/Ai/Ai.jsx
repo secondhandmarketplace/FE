@@ -341,14 +341,9 @@ const Ai = () => {
         </button>
       </form>
 
-      {/* <div className="Ai-Controls">
-        <button className="Ai-ClearBtn" onClick={handleClearHistory}>
-          🗑️ 대화 기록 초기화
-        </button>
-        <div className="Ai-Info">
-          💡 최근 등록된 상품을 우선으로 추천해드립니다
-        </div>
-      </div> */}
+      <button className="Ai-ClearBtn" onClick={handleClearHistory}>
+        🗑️
+      </button>
     </div>
   );
 };

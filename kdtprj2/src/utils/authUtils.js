@@ -13,7 +13,6 @@ export const getUserId = () => {
       !userId ||
       userId === "null" ||
       userId === "undefined" ||
-      userId === "1" ||
       userId === "guest"
     ) {
       console.warn("유효하지 않은 사용자 ID 감지:", userId);

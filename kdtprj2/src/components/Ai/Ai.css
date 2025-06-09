@@ -288,7 +288,7 @@
 }
 
 .Ai-PromptInput:focus {
-  border-color: #ff6f0f;
+  border-color: #a0c4ff;
 }
 
 .Ai-PromptBtn {
@@ -296,7 +296,7 @@
   padding: 0 24px;
   border-radius: 0 8px 8px 0;
   border: none;
-  background: #ff6f0f;
+  background: #a0c4ff;
   color: #fff;
   font-weight: 700;
   cursor: pointer;
@@ -307,12 +307,23 @@
 }
 
 .Ai-PromptBtn:disabled {
-  background: #ffa65c;
+  background: #a0c4ff;
   cursor: not-allowed;
 }
 
 .Ai-PromptBtn:hover:not(:disabled) {
-  background: #e65c00;
+  background: #dae8ff;
+}
+
+@media (max-width: 880px) {
+  .Ai-ClearBtn {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    bottom: 20px;
+    right: 10px;
+    background-color: none;
+  }
 }
 
 /* 모바일 반응형 */
@@ -390,19 +401,20 @@
   padding: 6px 16px;
   border-radius: 8px;
   border: none;
-  background: #eee;
+  background: none;
   color: #222;
   font-size: 14px;
   cursor: pointer;
-  transition: background 0.2s;
+  /* transition: background 0.2s; */
   z-index: 555;
+  justify-content: center;
 }
 .Ai-ClearBtn:hover {
-  background: #ff6f0f;
+  background: none;
   color: #fff;
 }
 .Ai-AiBubble strong {
-  color: #ff6f0f;
+  color: #a0c4ff;
   font-weight: bold;
 }
 
