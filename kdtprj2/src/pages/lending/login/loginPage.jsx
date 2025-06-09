@@ -13,7 +13,7 @@ import styles from "./login.module.css";
 
 const LoginPage = () => {
   // ✅ 기존 코드는 그대로 유지
-  const [userId, setUserIdState] = useState(""); // ✅ 변수명 충돌 방지
+  const [userid, setUserIdState] = useState(""); // ✅ 변수명 충돌 방지
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -50,12 +50,12 @@ const LoginPage = () => {
       setError("");
 
       console.log("=== 실제 로그인 시도 ===");
-      console.log("입력된 사용자 ID:", userId);
+      console.log("입력된 사용자 ID:", userid);
       console.log("입력된 비밀번호:", password ? "****" : "없음");
 
       // ✅ 1단계: 사용자 존재 확인
       const checkResponse = await axios.get(
-        `http://localhost:8080/api/users/check/${userId}`,
+        `http://localhost:8080/api/users/check/${userid}`,
         {
           timeout: 10000,
           withCredentials: true,
@@ -73,7 +73,7 @@ const LoginPage = () => {
       const loginResponse = await axios.post(
         `http://localhost:8080/api/users/login`,
         {
-          userId: userId, // ✅ 실제 입력된 사용자 ID 사용
+          userid: userid, // ✅ 실제 입력된 사용자 ID 사용
           password: password,
         },
         {
@@ -86,18 +86,18 @@ const LoginPage = () => {
 
       if (loginResponse.data.success) {
         // ✅ 3단계: 서버에서 받은 실제 사용자 정보 저장
-        const actualUserId = loginResponse.data.userId || userId;
+        const actualUserId = loginResponse.data.userid || userid;
 
         console.log("=== 로그인 성공 ===");
         console.log("서버에서 받은 사용자 ID:", actualUserId);
-        console.log("입력한 사용자 ID:", userId);
+        console.log("입력한 사용자 ID:", userid);
 
         const userInfo = {
-          userId: actualUserId, // ✅ 서버 응답의 실제 사용자 ID
+          userid: actualUserId, // ✅ 서버 응답의 실제 사용자 ID
           token: loginResponse.data.token,
           name:
             loginResponse.data.name ||
-            loginResponse.data.userName ||
+            loginResponse.data.username ||
             actualUserId,
           loginTime: new Date().toISOString(),
         };
@@ -148,7 +148,7 @@ const LoginPage = () => {
    */
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "userId") {
+    if (name === "userid") {
       setUserIdState(value); // ✅ 변수명 수정
     } else if (name === "password") {
       setPassword(value);
@@ -183,9 +183,9 @@ const LoginPage = () => {
         <div className={styles.inputContainer}>
           <input
             type="text"
-            name="userId"
+            name="userid"
             placeholder="사용자 ID를 입력하세요"
-            value={userId}
+            value={userid}
             required
             autoComplete="username"
             className={styles.enterID}
@@ -212,7 +212,7 @@ const LoginPage = () => {
 
         <button
           type="submit"
-          disabled={loading || !userId.trim() || !password.trim()}
+          disabled={loading || !userid.trim() || !password.trim()}
           className={styles.loginBtn}>
           {loading ? "로그인 중..." : "로그인"}
         </button>
@@ -221,7 +221,7 @@ const LoginPage = () => {
           <button
             type="button"
             className={styles.signUp}
-            onClick={() => navigate("/register")}
+            onClick={() => navigate("/signup")}
             disabled={loading}>
             회원가입
           </button>
