@@ -33,9 +33,26 @@ function SignupPage() {
     e.preventDefault();
     setLoading(true);
 
+    // 필수값 체크: userid, password, confirmPassword
+    if (!formData.Userid.trim()) {
+      alert("아이디를 입력해주세요.");
+      setLoading(false);
+      return;
+    }
+    if (!formData.password.trim()) {
+      alert("비밀번호를 입력해주세요.");
+      setLoading(false);
+      return;
+    }
+    if (formData.password !== formData.confirmPassword) {
+      alert("비밀번호가 일치하지 않습니다.");
+      setLoading(false);
+      return;
+    }
+
     try {
       const signupData = {
-        Userid: formData.Userid,
+        userid: formData.Userid,
         name: formData.name,
         email: formData.email,
         phone: formData.phone.replace(/-/g, ""),
@@ -48,7 +65,7 @@ function SignupPage() {
 
       if (response.data && response.data.success) {
         alert("회원가입이 완료되었습니다!");
-        navigate("/login");
+        navigate("/");
       } else {
         alert(response.data.message || "회원가입에 실패했습니다.");
       }
@@ -75,6 +92,7 @@ function SignupPage() {
                 onChange={(e) => handleInputChange("Userid", e.target.value)}
                 disabled={loading}
                 className={styles.input}
+                required
               />
               <input
                 type="text"
@@ -107,6 +125,7 @@ function SignupPage() {
                 onChange={(e) => handleInputChange("password", e.target.value)}
                 disabled={loading}
                 className={styles.input}
+                required
               />
               <input
                 type="password"
@@ -117,6 +136,7 @@ function SignupPage() {
                 }
                 disabled={loading}
                 className={styles.input}
+                required
               />
             </div>
           </div>

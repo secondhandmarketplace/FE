@@ -4,7 +4,7 @@ import "./Ai.css";
 import Header from "../Header/Header";
 
 // 사용자 ID를 localStorage나 context 등에서 가져온다고 가정
-function getCurrentUserId() {
+function getCurrentUserid() {
   return localStorage.getItem("senderId") || "guest";
 }
 
@@ -47,8 +47,8 @@ function renderAiAnswer(answer) {
 }
 
 const Ai = () => {
-  const userId = getCurrentUserId();
-  const STORAGE_KEY = `ai-chat-messages-${userId}`;
+  const Userid = getCurrentUserid();
+  const STORAGE_KEY = `ai-chat-messages-${Userid}`;
 
   const [prompt, setPrompt] = useState("");
   const [messages, setMessages] = useState([]);
@@ -341,14 +341,14 @@ const Ai = () => {
         </button>
       </form>
 
-      <div className="Ai-Controls">
+      {/* <div className="Ai-Controls">
         <button className="Ai-ClearBtn" onClick={handleClearHistory}>
           🗑️ 대화 기록 초기화
         </button>
         <div className="Ai-Info">
           💡 최근 등록된 상품을 우선으로 추천해드립니다
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
