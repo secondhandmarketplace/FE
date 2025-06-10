@@ -168,8 +168,18 @@ function ItemDetailPage() {
   const nextImg = () => setCurrent((current + 1) % images.length);
 
   const handleChatClick = () => {
+    if (!item || !item.sellerId) {
+      alert("판매자 정보가 없어 채팅을 시작할 수 없습니다.");
+      return;
+    }
     const roomId = makeRoomIdFromItem(item);
-    navigate("/chat", { state: { ...item, roomId } });
+    navigate("/chat", {
+      state: {
+        ...item,
+        sellerId: item.sellerId, // ✅ sellerId 명시적으로 전달
+        roomId,
+      },
+    });
   };
 
   if (loading) {

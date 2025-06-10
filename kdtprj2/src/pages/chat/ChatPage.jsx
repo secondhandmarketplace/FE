@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import styles from "./chat.module.css";
 import Header from "../../components/Header/Header";
 import ChatWindow from "../../components/ChatWindow/ChatWindow";
-import { useLocation } from "react-router-dom";
 import { getUserId } from "../../utils/authUtils.js";
 
 // ✅ axios 인스턴스 생성 (Java Spring 환경 반영)
@@ -24,7 +23,7 @@ const ChatPage = () => {
   const [chatRoom, setChatRoom] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // ✅ 채팅방 생성 검증 함수 정의 (누락된 함수 추가)
+  // ✅ 채팅방 생성 검증 함수 정의
   const createChatRoomWithValidation = async (Userid, otherUserid, itemId) => {
     try {
       // ✅ 최종 검증
@@ -103,7 +102,7 @@ const ChatPage = () => {
     }
   };
 
-  // ✅ 채팅방 생성 또는 조회 (대화형 인공지능 지원)
+  // ✅ 채팅방 생성 또는 조회
   useEffect(() => {
     const initializeChatRoom = async () => {
       if (!item || !Userid) {
@@ -115,18 +114,13 @@ const ChatPage = () => {
       try {
         setLoading(true);
 
+        // ✅ 판매자 정보는 item.sellerId로 참조 (DTO에서 반드시 포함되어야 함)
         const otherUserid = item.sellerId;
 
         console.log("채팅방 초기화 - 판매자 ID 검증:", {
           itemId: item.id,
           Userid: Userid,
           otherUserid: otherUserid,
-          allSellerFields: {
-            OwnerId: item.OwnerId,
-            sellerId: item.sellerId,
-            sellerUserid: item.sellerUserid,
-            seller: item.seller,
-          },
         });
 
         if (!otherUserid || otherUserid === Userid) {
@@ -229,7 +223,7 @@ const ChatPage = () => {
         <ChatWindow
           roomId={chatRoom?.roomId || chatRoom?.id}
           itemId={item.id}
-          otherUserid={item.OwnerId}
+          otherUserid={item.sellerId} // ✅ 판매자 정보는 sellerId로 전달
         />
       </div>
     </div>
