@@ -59,7 +59,7 @@ const ChatWindow = ({ roomId, itemId, otherUserId }) => {
 
       const socket = new SockJS("http://localhost:8080/ws");
       const client = Stomp.over(socket);
-      client.debug = null;
+      client.debug = () => {}; // 디버그 메시지 비활성화
 
       client.connect(
         {},
@@ -108,8 +108,8 @@ const ChatWindow = ({ roomId, itemId, otherUserId }) => {
   const sendMessage = async () => {
     if (!inputMessage.trim()) return;
 
-    const messageData = {
-      senderId: userId,
+    const messageData = { // ChatMessageDTO 형식에 맞게 수정 되어있음 
+      senderId: userId, 
       content: inputMessage.trim(),
       chatRoomId: roomId,
       timestamp: new Date().toISOString(),

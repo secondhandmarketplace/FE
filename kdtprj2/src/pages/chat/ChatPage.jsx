@@ -25,39 +25,40 @@ const ChatPage = () => {
   const [loading, setLoading] = useState(true);
 
   // ✅ 채팅방 생성 검증 함수 정의 (누락된 함수 추가)
-  const createChatRoomWithValidation = async (Userid, otherUserid, itemId) => {
-    try {
-      // ✅ 최종 검증
-      if (!Userid || !otherUserid || !itemId) {
-        throw new Error("필수 파라미터 누락");
-      }
+  const createChatRoomWithValidation = async (itemTransactionId, buyerId, sellerId) => {
+  try {
 
-      if (Userid === otherUserid) {
-        throw new Error("자기 자신과는 채팅할 수 없습니다");
-      }
-
-      const requestData = {
-        Userid: String(Userid),
-        otherUserid: String(otherUserid),
-        itemId: Number(itemId),
-      };
-
-      console.log("채팅방 생성 요청 데이터:", requestData);
-
-      const response = await api.post("/chat/rooms", requestData, {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
-
-      console.log("채팅방 생성/조회 성공:", response.data);
-      setChatRoom(response.data);
-    } catch (error) {
-      console.error("채팅방 생성 검증 실패:", error);
-      throw error;
+    // ✅ 최종 검증
+    if (!buyerId || !sellerId || !itemTransactionId) {
+      throw new Error("필수 파라미터 누락");
     }
-  };
+
+    if (buyerId === sellerId) {
+      throw new Error("자기 자신과는 채팅할 수 없습니다");
+    }
+
+    const requestData = {
+      itemTransactionId: Number(itemTransactionId),
+      buyerId: String(buyerId),
+      sellerId: String(sellerId),
+    };
+
+    console.log("채팅방 생성 요청 데이터:", requestData);
+
+    const response = await api.post("/chat/rooms", requestData, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+
+    console.log("채팅방 생성/조회 성공:", response.data);
+    setChatRoom(response.data);
+  } catch (error) {
+    console.error("채팅방 생성 검증 실패:", error);
+    throw error;
+  }
+};
 
   // ✅ 거래 상태 변경 (axios 연동)
   const handleStatus = async (itemId, newStatus) => {
@@ -105,73 +106,54 @@ const ChatPage = () => {
 
   // ✅ 채팅방 생성 또는 조회 (대화형 인공지능 지원)
   useEffect(() => {
-    const initializeChatRoom = async () => {
-      if (!item || !Userid) {
-        console.warn("필수 데이터 누락:", { item, Userid });
-        setLoading(false);
-        return;
+  const initializeChatRoom = async () => {
+    if (!item || !Userid) {
+      console.warn("필수 데이터 누락:", { item, Userid });
+      setLoading(false);
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      // 여러 필드에서 판매자 ID를 안전하게 추출
+      const sellerId =
+        item.sellerId ||
+        item.OwnerId ||
+        item.otherUserId ||
+        item.otherUserid ||
+        item.seller?.userid ||
+        item.seller?.id ||
+        item.sellerUserid;
+
+      console.log("채팅방 초기화 - 판매자 ID 검증:", {
+        itemId: item.id,
+        buyerId: Userid,
+        sellerId: sellerId,
+        allSellerFields: {
+          OwnerId: item.OwnerId,
+          sellerId: item.sellerId,
+          sellerUserid: item.sellerUserid,
+          seller: item.seller,
+        },
+      });
+
+      if (!sellerId || sellerId === Userid) {
+        throw new Error(`유효하지 않은 판매자 정보: ${sellerId}`);
       }
 
-      try {
-        setLoading(true);
+      // ✅ 채팅방 생성
+      await createChatRoomWithValidation(item.id, Userid, sellerId);
+      
+    } catch (error) {
+      console.log("채팅방 초기화 실패:", error);
+    } finally { 
+      setLoading(false);
+    }
+  };
 
-        const otherUserid = item.sellerId;
-
-        console.log("채팅방 초기화 - 판매자 ID 검증:", {
-          itemId: item.id,
-          Userid: Userid,
-          otherUserid: otherUserid,
-          allSellerFields: {
-            OwnerId: item.OwnerId,
-            sellerId: item.sellerId,
-            sellerUserid: item.sellerUserid,
-            seller: item.seller,
-          },
-        });
-
-        if (!otherUserid || otherUserid === Userid) {
-          throw new Error(`유효하지 않은 판매자 정보: ${otherUserid}`);
-        }
-
-        // ✅ 채팅방 생성
-        await createChatRoomWithValidation(Userid, otherUserid, item.id);
-      } catch (error) {
-        console.error("채팅방 초기화 실패:", error);
-
-        // ✅ 상세한 에러 분석 및 안내
-        let errorMessage = "🤖 AI가 문제를 분석했습니다:\n\n";
-
-        if (
-          error.message.includes("undefined") ||
-          error.message.includes("unknown")
-        ) {
-          errorMessage +=
-            "❌ 판매자 정보 누락\n" +
-            "• 상품 데이터베이스에 판매자 정보가 없습니다\n" +
-            "• 관리자가 데이터를 수정해야 합니다\n" +
-            "• 다른 상품을 선택해주세요";
-        } else if (error.response?.status === 500) {
-          errorMessage +=
-            "🔧 서버 오류\n" +
-            "• 백엔드 서버에서 오류가 발생했습니다\n" +
-            "• 잠시 후 다시 시도해주세요\n" +
-            "• 문제가 지속되면 새로고침해주세요";
-        } else {
-          errorMessage +=
-            "🌐 네트워크 오류\n" +
-            "• 인터넷 연결을 확인해주세요\n" +
-            "• 서버가 실행 중인지 확인해주세요";
-        }
-
-        alert(errorMessage);
-        navigate(-1);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    initializeChatRoom();
-  }, [item, Userid, navigate]);
+  initializeChatRoom();
+}, [item, Userid, navigate]);
 
   if (loading) {
     return (

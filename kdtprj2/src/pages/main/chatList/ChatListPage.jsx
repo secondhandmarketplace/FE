@@ -22,27 +22,28 @@ function ChatListPage() {
   // ✅ 채팅방 목록 가져오기 (Spring Boot 연동)
   // ✅ 채팅방 목록 가져오기 (에러 처리 강화)
   const fetchChatRooms = async () => {
+    console.log("fetchChatRooms 함수 진입");
     try {
       setLoading(true);
       setError(null);
 
-      const userId =
-        localStorage.getItem("userId") ||
+      const userid =
+        localStorage.getItem("userid") ||
         localStorage.getItem("senderId") ||
         "guest";
 
-      console.log("채팅방 목록 요청:", userId);
+      console.log("채팅방 목록 요청:", userid);
 
       // ✅ 사용자 ID 유효성 검사
-      if (!userId || userId === "guest" || userId === "null") {
-        console.warn("유효하지 않은 사용자 ID:", userId);
+      if (!userid || userid === "guest" || userid === "null") {
+        console.warn("유효하지 않은 사용자 ID:", userid);
         setChatRooms([]);
         return;
       }
 
       // ✅ Spring Boot API 호출 (타임아웃 증가)
       const response = await api.get("/chat/rooms", {
-        params: { userId: userId },
+        params: { useid: userid },
         timeout: 15000, // 15초로 증가
       });
 
@@ -73,6 +74,7 @@ function ChatListPage() {
           unreadCount: room.unreadCount || 0,
           otherUserId: room.otherUserId || "unknown",
           status: room.status || "active",
+          sellerId: room.sellerId,
         }));
 
       // ✅ 최근 등록순으로 정렬 [3]
@@ -174,24 +176,29 @@ function ChatListPage() {
   };
 
   // ✅ 채팅방 클릭 핸들러
-  const handleChatRoomClick = (room) => {
-    // 읽지 않은 메시지 읽음 처리
-    if (room.unreadCount > 0) {
-      markAsRead(room.roomId);
-    }
+  const handleChatRoomClick = async (room) => {
+  // 읽지 않은 메시지 읽음 처리
+  if (room.unreadCount > 0) {
+    markAsRead(room.roomId);
+  }
 
-    // 채팅 페이지로 이동
+  try {
+  const sellerId = room.sellerId;
+    // 채팅 페이지로 이동 (sellerId 포함)
     navigate("/chat", {
       state: {
         ...room,
-        roomId: room.roomId,
-        itemId: room.itemId,
-        otherUserId: room.otherUserId,
+        sellerId: room.sellerId, // 판매자 id를 명확히 포함
+        itemTransactionId: room.itemId,
       },
     });
-  };
+  } catch (err) {
+    alert("상품 정보를 불러올 수 없습니다.");
+  }
+};
 
   useEffect(() => {
+    console.log("유즈 이펙트 실행");
     fetchChatRooms();
 
     // ✅ 10초마다 채팅방 목록 새로고침 (실시간 업데이트)
