@@ -157,22 +157,23 @@ function RegisterForm({ onSubmit, initialItem, onSave }) {
         .map((t) => t.trim())
         .filter((t) => t);
 
-      // 3. 상품 데이터 구성 (필드명 확인)
+      // 3. 상품 데이터 구성 (thumbnail, imageUrl, imageUrls 모두 포함)
       const itemData = {
         title,
         price: price === "" ? 0 : Number(price),
         tags: tagArray,
-        value: condition, // 상품 상태
+        value: condition,
         description,
         category: category || "기타",
-        imageUrl: imageUrls[0], // 첫 번째 이미지를 대표 이미지로
-        itemImages: imageUrls, // 모든 이미지 URL 배열
+        imageUrl: imageUrls[0], // ✅ 대표 이미지 (첫 번째 이미지)
+        thumbnail: imageUrls[0], // ✅ 썸네일 (대표 이미지와 동일)
+        imageUrls: imageUrls, // ✅ 모든 이미지 배열
         status: "판매중",
-        sellerId: getUserId(), // 판매자 ID
-        meetLocation: "미정", // 거래 장소 (필요시 추가)
+        sellerId: getUserId(),
+        meetLocation: "미정",
       };
 
-      console.log("최종 전송 데이터:", itemData); // 디버깅용
+      console.log("최종 전송 데이터:", itemData);
 
       const result = await registerItem(itemData);
 
@@ -192,7 +193,6 @@ function RegisterForm({ onSubmit, initialItem, onSave }) {
       setLoading(false);
     }
   };
-
   // 폼 초기화
   const resetForm = () => {
     setTitle("");

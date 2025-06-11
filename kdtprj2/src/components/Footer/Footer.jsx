@@ -15,7 +15,8 @@ function Footer() {
     location.pathname === "/history/liked" ||
     location.pathname === "/history/viewed" ||
     location.pathname === "/history/purchased" ||
-    location.pathname === "/history/sales"
+    location.pathname === "/history/sales" ||
+    location.pathname === "/mypage"
   ) {
     return (
       <footer className={styles.homeFooter}>
@@ -24,7 +25,7 @@ function Footer() {
           <span>홈</span>
         </Link>
         <Link to="/ai" className={styles.item}>
-          <img src="/aiChat.svg" alt="AI서비스" />
+          <img src="../../../public/aiChat.svg" alt="AI서비스" />
           <span>AI 서비스</span>
         </Link>
 

@@ -7,7 +7,7 @@
 
 .signupContainer {
   width: 100%;
-  height:calc(100vh - 63px);
+  /* height: calc(100vh - 63px); */
   padding-top: 80px;
   margin: 0 auto;
   overflow-y: auto;
@@ -96,6 +96,7 @@
   align-items: center;
   justify-content: center;
   white-space: nowrap;
+  margin-left: 15px;
 }
 
 .signupBtn.disabled {
@@ -119,6 +120,6 @@
   background: #00ff16;
 }
 
-.userId {
+.Userid {
   color: #00ff16;
 }

@@ -49,7 +49,7 @@ function ItemDetailPage() {
         description: response.data.description,
         place: response.data.place || response.data.location,
         regdate: response.data.regDate || response.data.regdate,
-        seller: response.data.seller,
+        sellerId: response.data.sellerId,
       };
 
       setItem(transformedItem);
@@ -94,7 +94,7 @@ function ItemDetailPage() {
         category: item.category,
         description: item.description,
         regdate: item.regDate || item.regdate,
-        seller: item.seller,
+        sellerId: item.sellerId,
       }));
 
       setRelatedItems(transformedRelatedItems);
@@ -110,9 +110,11 @@ function ItemDetailPage() {
     try {
       const userId = localStorage.getItem("userId") || "guest";
 
-      const response = await api.post("/items/like", {
-        itemId: item.id,
-        userId: userId,
+    
+      const response = await api.post(`/items/like/${item.id}`, null, {
+      params: {
+        userid: userId,
+      },
       });
 
       if (response.data.success) {
@@ -265,7 +267,7 @@ function ItemDetailPage() {
         <div className={styles["seller-info"]}>
           <span>판매자:</span>
           <span className={styles["seller-name"]}>
-            {item.seller?.name || item.seller?.username || "학생1"}
+            {item.sellerId|| item.seller?.username || "학생1"}
           </span>
         </div>
 

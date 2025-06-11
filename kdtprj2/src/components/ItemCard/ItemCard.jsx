@@ -77,6 +77,14 @@ function ItemCard({ item, hideCompleted = true }) {
     return `${price.toLocaleString()}원`;
   };
 
+  // ✅ 태그 배열 변환 (문자열이면 split, 배열이면 그대로, 없으면 빈 배열)
+  const tags =
+    typeof item.tags === "string"
+      ? item.tags.split(",")
+      : Array.isArray(item.tags)
+      ? item.tags
+      : [];
+
   return (
     <div className={styles.card} onClick={handleClick}>
       <div className={styles.imageWrapper}>
@@ -101,7 +109,7 @@ function ItemCard({ item, hideCompleted = true }) {
         <p className={styles.title}>{item.title || "제목 없음"}</p>
         <p className={styles.price}>{formatPrice(item.price || 0)}</p>
         <div className={styles.tags}>
-          {(item.tags || []).map((tag, idx) => (
+          {tags.map((tag, idx) => (
             <Tag key={idx} text={tag} />
           ))}
         </div>

@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import styles from "./MyPage.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import Modal from "../../../components/Modal/Modal.jsx";
-import { getUserId } from "../../../utils/authUtils.js";
+import { getUserId, getUserInfo } from "../../../utils/authUtils.js";
+import { clearAuth } from "../../../utils/authUtils.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
@@ -15,17 +16,20 @@ function MyPage() {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [nickname, setNickname] = useState("");
+  const [nickname, setNickname] = useState(""); // (수정 모드에서만 사용)
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-  const userId = getUserId();
+  const userInfo = getUserInfo();
 
-  // 임시 정보 (실제 정보로 대체)
+  // user 객체 정의 (스쿨, 닉네임 제외)
   const user = {
-    nickname: "user1",
-    school: "삼육대학교",
-    phone: "010-0000-0000",
-    address: "서울시 임시주소",
+    userid: userInfo?.userid || "",
+  };
+
+  // 수정 모드에서 저장 버튼 클릭 시
+  const handleEditSubmit = (e) => {
+    e.preventDefault();
+    setIsEditing(false);
   };
 
   return (
@@ -49,8 +53,7 @@ function MyPage() {
                 className={styles["avatar-icon"]}
               />
             </div>
-            <div className={styles["profile-name"]}>{user.nickname}</div>
-            <div>{user.school}</div>
+            <div className={styles["profile-name"]}>{user.userid}</div>
             <button
               className={styles["edit-profile-button"]}
               onClick={() => setIsEditing(true)}>
@@ -100,7 +103,10 @@ function MyPage() {
           <div className={styles["profile-actions"]}>
             <button
               className={styles["logout-btn"]}
-              onClick={() => navigate("/")}>
+              onClick={() => {
+                clearAuth();
+                navigate("/");
+              }}>
               로그아웃
             </button>
             <button
@@ -111,20 +117,7 @@ function MyPage() {
           </div>
         </>
       ) : (
-        <form
-          className={styles["edit-form"]}
-          onSubmit={(e) => {
-            e.preventDefault();
-            setIsEditing(false);
-          }}>
-          <div className={styles["edit-row"]}>
-            <label className={styles["edit-label"]}>닉네임</label>
-            <input
-              className={styles["edit-input"]}
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
-            />
-          </div>
+        <form className={styles["edit-form"]} onSubmit={handleEditSubmit}>
           <div className={styles["edit-row"]}>
             <label className={styles["edit-label"]}>연락처</label>
             <input
@@ -165,6 +158,8 @@ function MyPage() {
           onCancel={() => setIsOpen(false)}
         />
       )}
+
+      {/* <Footer /> */}
     </div>
   );
 }
