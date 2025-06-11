@@ -13,7 +13,7 @@ const api = axios.create({
   },
 });
 
-const ChatWindow = ({ roomId, itemId, otherUserId }) => {
+const ChatWindow = ({ roomId, itemId, otherUserid }) => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
   const [stompClient, setStompClient] = useState(null);
@@ -21,8 +21,8 @@ const ChatWindow = ({ roomId, itemId, otherUserId }) => {
   const [loading, setLoading] = useState(true);
   const messagesEndRef = useRef(null);
 
-  const userId =
-    localStorage.getItem("userId") ||
+  const Userid =
+    localStorage.getItem("Userid") ||
     localStorage.getItem("senderId") ||
     "guest";
 
@@ -109,7 +109,7 @@ const ChatWindow = ({ roomId, itemId, otherUserId }) => {
     if (!inputMessage.trim()) return;
 
     const messageData = {
-      senderId: userId,
+      senderId: Userid,
       content: inputMessage.trim(),
       chatRoomId: roomId,
       timestamp: new Date().toISOString(),
@@ -178,7 +178,7 @@ const ChatWindow = ({ roomId, itemId, otherUserId }) => {
             <Message
               key={message.messageId || index}
               text={message.content}
-              isMine={message.senderId === userId}
+              isMine={message.senderId === Userid}
               time={new Date(message.sentAt).toLocaleTimeString("ko-KR", {
                 hour: "2-digit",
                 minute: "2-digit",

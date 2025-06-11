@@ -26,23 +26,23 @@ function ChatListPage() {
       setLoading(true);
       setError(null);
 
-      const userId =
-        localStorage.getItem("userId") ||
+      const Userid =
+        localStorage.getItem("Userid") ||
         localStorage.getItem("senderId") ||
         "guest";
 
-      console.log("채팅방 목록 요청:", userId);
+      console.log("채팅방 목록 요청:", Userid);
 
       // ✅ 사용자 ID 유효성 검사
-      if (!userId || userId === "guest" || userId === "null") {
-        console.warn("유효하지 않은 사용자 ID:", userId);
+      if (!Userid || Userid === "guest" || Userid === "null") {
+        console.warn("유효하지 않은 사용자 ID:", Userid);
         setChatRooms([]);
         return;
       }
 
       // ✅ Spring Boot API 호출 (타임아웃 증가)
       const response = await api.get("/chat/rooms", {
-        params: { userId: userId },
+        params: { Userid: Userid },
         timeout: 15000, // 15초로 증가
       });
 
@@ -71,7 +71,7 @@ function ChatListPage() {
           itemTitle: room.itemTitle || "상품명 없음",
           itemPrice: room.itemPrice || 0,
           unreadCount: room.unreadCount || 0,
-          otherUserId: room.otherUserId || "unknown",
+          otherUserid: room.otherUserid || "unknown",
           status: room.status || "active",
         }));
 
@@ -130,12 +130,12 @@ function ChatListPage() {
     }
 
     try {
-      const userId =
-        localStorage.getItem("userId") || localStorage.getItem("senderId");
+      const Userid =
+        localStorage.getItem("Userid") || localStorage.getItem("senderId");
 
       // ✅ Spring Boot API 호출
       const response = await api.delete(`/chat/rooms/${roomId}`, {
-        params: { userId: userId },
+        params: { Userid: Userid },
       });
 
       if (response.data.success) {
@@ -154,12 +154,12 @@ function ChatListPage() {
   // ✅ 읽지 않은 메시지 수 업데이트 (Spring Boot 연동)
   const markAsRead = async (roomId) => {
     try {
-      const userId =
-        localStorage.getItem("userId") || localStorage.getItem("senderId");
+      const Userid =
+        localStorage.getItem("Userid") || localStorage.getItem("senderId");
 
       // ✅ Spring Boot API 호출
       await api.post(`/chat/rooms/${roomId}/read`, null, {
-        params: { userId: userId },
+        params: { Userid: Userid },
       });
 
       // 로컬 상태에서 읽지 않은 메시지 수 초기화
@@ -186,7 +186,7 @@ function ChatListPage() {
         ...room,
         roomId: room.roomId,
         itemId: room.itemId,
-        otherUserId: room.otherUserId,
+        otherUserid: room.otherUserid,
       },
     });
   };

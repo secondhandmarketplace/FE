@@ -143,7 +143,7 @@ function SignupPage() {
           <div className={styles["input-row"]}>
             <button
               type="submit"
-              className={styles.signupBtn}
+              className={styles.signupBtn}  
               disabled={loading}>
               {loading ? "회원가입 중..." : "회원가입"}
             </button>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "./RegisterForm.module.css";
-import { getUserId } from "../../utils/authUtils";
+import { getUserid } from "../../utils/authUtils";
 
 // axios 인스턴스 생성
 const api = axios.create({
@@ -169,7 +169,7 @@ function RegisterForm({ onSubmit, initialItem, onSave }) {
         thumbnail: imageUrls[0], // ✅ 썸네일 (대표 이미지와 동일)
         imageUrls: imageUrls, // ✅ 모든 이미지 배열
         status: "판매중",
-        sellerId: getUserId(),
+        sellerId: getUserid(),
         meetLocation: "미정",
       };
 

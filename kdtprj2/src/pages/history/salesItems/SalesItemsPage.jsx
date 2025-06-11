@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../../../components/Header/Header.jsx";
 import Footer from "../../../components/Footer/Footer.jsx";
 import styles from "./SalesItems.module.css";
-import { getUserId } from "../../../utils/authUtils.js";
+import { getUserid } from "../../../utils/authUtils.js";
 import ItemCard from "../../../components/ItemCard/ItemCard.jsx";
 import RegisterForm from "../../../components/RegisterForm/RegisterForm.jsx";
 
@@ -23,15 +23,15 @@ function SalesItemsPage() {
 
     localStorage.setItem("items", JSON.stringify(newItems));
 
-    const userId = getUserId();
-    setMyItems(newItems.filter((item) => item.OwnerId === userId));
+    const Userid = getUserid();
+    setMyItems(newItems.filter((item) => item.OwnerId === Userid));
     setIsEdit(false);
     setSelectedItem(null);
     navigate(-1);
   };
 
   useEffect(() => {
-    const userId = getUserId();
+    const Userid = getUserid();
     const allItems = JSON.parse(localStorage.getItem("items") || "");
 
     //확인용 로그
@@ -40,7 +40,7 @@ function SalesItemsPage() {
       allItems.map((i) => i.status)
     );
 
-    const filtered = allItems.filter((item) => item.OwnerId === userId);
+    const filtered = allItems.filter((item) => item.OwnerId === Userid);
     setMyItems(filtered);
   }, []);
 

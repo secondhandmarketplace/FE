@@ -24,19 +24,19 @@ const Search = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const userId =
-    localStorage.getItem("senderId") || localStorage.getItem("userId");
+  const Userid =
+    localStorage.getItem("senderId") || localStorage.getItem("Userid");
 
   // ✅ 검색 기록 조회 (axios 연동)
   useEffect(() => {
     const fetchHistory = async () => {
-      if (!userId) return;
+      if (!Userid) return;
 
       try {
-        console.log("검색 기록 조회:", userId);
+        console.log("검색 기록 조회:", Userid);
 
         const response = await api.get("/search-history", {
-          params: { userId: userId },
+          params: { Userid: Userid },
         });
 
         console.log("검색 기록 응답:", response.data);
@@ -65,7 +65,7 @@ const Search = () => {
     };
 
     fetchHistory();
-  }, [userId]);
+  }, [Userid]);
 
   // ✅ 검색 추천어 조회 (axios 연동, 대화형 인공지능 [3] 지원)
   useEffect(() => {
@@ -121,7 +121,7 @@ const Search = () => {
       // ✅ 검색 기록 저장
       await api.post("/search-history", {
         keyword: query,
-        userId: userId,
+        Userid: Userid,
         timestamp: new Date().toISOString(),
       });
 
@@ -152,7 +152,7 @@ const Search = () => {
       await api.delete("/search-history", {
         params: {
           keyword: keyword,
-          userId: userId,
+          Userid: Userid,
         },
       });
 
@@ -179,7 +179,7 @@ const Search = () => {
       console.log("전체 검색 기록 삭제");
 
       await api.delete("/search-history/all", {
-        params: { userId: userId },
+        params: { Userid: Userid },
       });
 
       setHistory([]);

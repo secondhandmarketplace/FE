@@ -1,5 +1,5 @@
 // chatUtils.js
-import { getUserId } from "./authUtils.js"; // ✅ 명시적 import
+import { getUserid } from "./authUtils.js"; // ✅ 명시적 import
 
 /**
  * ✅ 채팅방 ID 생성 (최근 등록순 [1] 반영)
@@ -12,9 +12,9 @@ export const makeRoomIdFromItem = (item) => {
  * ✅ 메시지 전송 처리 (실시간 메시징 [7] 지원)
  */
 export const handleSend = ({ input, setInput, roomId, item }) => {
-  const userId = getUserId(); // ✅ authUtils에서 가져오기
+  const Userid = getUserid(); // ✅ authUtils에서 가져오기
 
-  if (!userId) {
+  if (!Userid) {
     console.error("사용자 ID가 없어 메시지를 전송할 수 없습니다.");
     alert("로그인이 필요합니다.");
     return;
@@ -23,10 +23,10 @@ export const handleSend = ({ input, setInput, roomId, item }) => {
   const trimmed = input.trim();
   if (!trimmed) return;
 
-  console.log("메시지 전송 시작:", { userId, roomId, content: trimmed });
+  console.log("메시지 전송 시작:", { Userid, roomId, content: trimmed });
 
   const newMsg = {
-    sender: userId,
+    sender: Userid,
     content: trimmed,
     timestamp: Date.now(),
     roomId,
