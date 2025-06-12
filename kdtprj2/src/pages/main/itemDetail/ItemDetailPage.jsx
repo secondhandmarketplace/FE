@@ -1,13 +1,15 @@
+// src/pages/main/itemDetail/ItemDetailPage.jsx
+
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Header from "../../../components/Header/Header";
 import Footer from "../../../components/Footer/Footer";
 import styles from "./itemDetail.module.css";
-import { makeRoomIdFromItem } from "../../../utils/chatUtils.js";
 import ItemCard from "../../../components/ItemCard/ItemCard.jsx";
+import { getUserId } from "../../../utils/authUtils.js";
 
-// axios 인스턴스 생성
+// Axios 인스턴스: API 요청을 위한 기본 설정
 const api = axios.create({
   baseURL: "http://localhost:8080/api",
   timeout: 10000,
@@ -19,160 +21,122 @@ const api = axios.create({
 function ItemDetailPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { id } = useParams(); // URL에서 아이템 ID 가져오기
+  const { id: itemId } = useParams();
 
-  const [item, setItem] = useState(location.state || null);
+  const [item, setItem] = useState(location.state?.item || null);
   const [relatedItems, setRelatedItems] = useState([]);
-  const [loading, setLoading] = useState(!location.state);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [current, setCurrent] = useState(0);
 
-  // 아이템 상세 정보 가져오기
-  const fetchItemDetail = async (itemId) => {
+  // ✅ 현재 로그인 사용자 ID
+  const currentUserId = getUserId();
+
+  useEffect(() => {
+    if (itemId) {
+      const fetchItemAndRelatedData = async () => {
+        try {
+          setLoading(true);
+          setError(null);
+
+          // ✅ 상품 상세 정보 조회
+          const itemResponse = await api.get(`/items/${itemId}`);
+          const data = itemResponse.data;
+
+          // ✅ 이미지 경로: 서버의 실제 경로인 '/api/image/'를 사용
+          const transformedItem = {
+            id: data.itemid || data.id,
+            title: data.title,
+            price: data.price,
+            imageUrl: data.imageUrl ? `/api/image/${data.imageUrl}` : null,
+            images:
+              data.itemImages && data.itemImages.length > 0
+                ? data.itemImages.map((imgFile) => `/api/image/${imgFile}`)
+                : data.imageUrl
+                ? [`/api/image/${data.imageUrl}`]
+                : [],
+            sellerId: data.sellerId,
+            category: data.category,
+            description: data.description,
+            status: data.status,
+            value: data.condition || data.value,
+            place: data.meetLocation || "미정",
+            tags: data.tags || [],
+          };
+          setItem(transformedItem);
+
+          // ✅ 연관 상품 조회
+          const relatedResponse = await api.get("/items/related", {
+            params: {
+              category: transformedItem.category,
+              excludeId: transformedItem.id,
+              limit: 5,
+            },
+          });
+          setRelatedItems(relatedResponse.data);
+
+          // ✅ 조회수 증가
+          await api.post(`/items/${itemId}/view`);
+        } catch (err) {
+          console.error("데이터 조회 실패:", err);
+          setError("상품 정보를 불러오는데 실패했습니다.");
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchItemAndRelatedData();
+    }
+  }, [itemId]);
+
+  // ✅ 찜하기 기능
+  const handleLikeClick = async () => {
+    try {
+      if (!currentUserId) {
+        alert("로그인이 필요합니다.");
+        navigate("/login");
+        return;
+      }
+      const response = await api.post(`/items/like/${item?.id}`, null, {
+        params: { userid: currentUserId },
+      });
+      alert(response.data.message || "찜 처리가 완료되었습니다.");
+    } catch (err) {
+      console.error("찜하기 실패:", err);
+      alert("찜하기에 실패했습니다. 다시 시도해주세요.");
+    }
+  };
+
+  // ✅ 채팅방 생성 및 이동
+  const handleStartChat = async () => {
     try {
       setLoading(true);
       setError(null);
 
-      const response = await api.get(`/items/${itemId}`);
+      // ✅ 백엔드 API 엔드포인트와 파라미터명 일치
+      const response = await api.post("/chat/rooms", {
+        itemTransactionId: Number(itemId),
+        buyerId: currentUserId,
+        sellerId: item?.sellerId, // 실제 판매자 ID 사용
+      });
 
-      // 백엔드 데이터를 프론트엔드 형식에 맞게 변환
-      const transformedItem = {
-        id: response.data.itemid || response.data.id,
-        title: response.data.title,
-        price: response.data.price,
-        imageUrl: response.data.imageUrl,
-        images: response.data.itemImages || [response.data.imageUrl],
-        tags: response.data.tags || [],
-        value: response.data.value || response.data.condition,
-        status: response.data.status,
-        category: response.data.category,
-        description: response.data.description,
-        place: response.data.place || response.data.location,
-        regdate: response.data.regDate || response.data.regdate,
-        sellerId: response.data.sellerId,
-      };
-
-      setItem(transformedItem);
-
-      // 연관 상품도 함께 가져오기
-      fetchRelatedItems(transformedItem.category, transformedItem.id);
+      // ✅ 채팅방 생성 성공 시 해당 채팅방으로 이동
+      const chatRoomId = response.data.id;
+      navigate(`/chat/${chatRoomId}?userId=${currentUserId}`);
     } catch (err) {
-      console.error("아이템 상세 조회 실패:", err);
-      setError(
-        err.response?.data?.message ||
-          err.message ||
-          "상품 정보를 불러오는데 실패했습니다."
-      );
+      setError("채팅방 생성에 실패했습니다.");
+      console.error("채팅방 생성 실패:", err);
     } finally {
       setLoading(false);
     }
   };
 
-  // 연관 상품 가져오기
-  const fetchRelatedItems = async (category, excludeId) => {
-    try {
-      const response = await api.get("/items/related", {
-        params: {
-          category: category,
-          excludeId: excludeId,
-          limit: 5,
-        },
-      });
-
-      const transformedRelatedItems = response.data.map((item) => ({
-        id: item.itemid || item.id,
-        title: item.title,
-        price: item.price,
-        imageUrl:
-          item.imageUrl ||
-          (item.itemImages && item.itemImages.length > 0
-            ? item.itemImages[0]
-            : "/assets/default-image.png"),
-        tags: item.tags || [],
-        value: item.value || item.condition,
-        status: item.status,
-        category: item.category,
-        description: item.description,
-        regdate: item.regDate || item.regdate,
-        sellerId: item.sellerId,
-      }));
-
-      setRelatedItems(transformedRelatedItems);
-    } catch (err) {
-      console.error("연관 상품 조회 실패:", err);
-      // 연관 상품 실패는 치명적이지 않으므로 에러 상태는 설정하지 않음
-      setRelatedItems([]);
-    }
-  };
-
-  // 찜하기 기능
-  const handleLikeClick = async () => {
-    try {
-      const userId = localStorage.getItem("userId") || "guest";
-
-    
-      const response = await api.post(`/items/like/${item.id}`, null, {
-      params: {
-        userid: userId,
-      },
-      });
-
-      if (response.data.success) {
-        alert("찜 목록에 추가되었습니다.");
-      } else {
-        alert(response.data.message || "이미 찜한 상품입니다.");
-      }
-    } catch (err) {
-      console.error("찜하기 실패:", err);
-
-      // 백엔드 실패 시 localStorage 백업 사용
-      const likedItems = JSON.parse(localStorage.getItem("likedItems") || "[]");
-      const exists = likedItems.some((i) => i.id === item.id);
-      if (exists) {
-        alert("이미 찜한 상품입니다.");
-        return;
-      }
-      likedItems.push(item);
-      localStorage.setItem("likedItems", JSON.stringify(likedItems));
-      alert("찜 목록에 추가되었습니다.");
-    }
-  };
-
-  // 조회수 증가
-  const incrementViewCount = async (itemId) => {
-    try {
-      await api.post(`/items/${itemId}/view`);
-    } catch (err) {
-      console.error("조회수 증가 실패:", err);
-      // 조회수 증가 실패는 사용자에게 알리지 않음
-    }
-  };
-
-  useEffect(() => {
-    if (id && !item) {
-      // URL에서 ID를 가져온 경우 (직접 접근)
-      fetchItemDetail(id);
-    } else if (item) {
-      // location.state로 데이터를 받은 경우
-      fetchRelatedItems(item.category, item.id);
-      incrementViewCount(item.id);
-    }
-  }, [id, item]);
-
-  // 이미지 처리
-  const images = item?.images || [item?.imageUrl] || [
-      "/assets/default-image.png",
-    ];
-
-  // 슬라이더 핸들러
+  const images = item?.images?.filter((img) => img) || [
+    "/assets/default-image.png",
+  ];
   const prevImg = () =>
     setCurrent((current - 1 + images.length) % images.length);
   const nextImg = () => setCurrent((current + 1) % images.length);
-
-  const handleChatClick = () => {
-    const roomId = makeRoomIdFromItem(item);
-    navigate("/chat", { state: { ...item, roomId } });
-  };
 
   if (loading) {
     return (
@@ -191,7 +155,7 @@ function ItemDetailPage() {
         <div className={styles.error}>
           오류 발생: {error}
           <button
-            onClick={() => fetchItemDetail(id)}
+            onClick={() => window.location.reload()}
             className={styles.retryButton}>
             다시 시도
           </button>
@@ -215,12 +179,15 @@ function ItemDetailPage() {
     <div className={styles.container}>
       <Header />
       <div className={styles.detailContainer}>
-        {/* 이미지 슬라이더 */}
         <div className={styles["image-slider"]}>
           {images.map((img, idx) => (
             <img
               key={idx}
-              src={img.startsWith("http") ? img : `http://localhost:8080${img}`}
+              src={
+                img && img.startsWith("http")
+                  ? img
+                  : `http://localhost:8080${img}`
+              }
               alt={`상품이미지${idx + 1}`}
               className={`${styles["slider-image"]} ${
                 current === idx ? styles["fade-in"] : styles["fade-out"]
@@ -259,19 +226,13 @@ function ItemDetailPage() {
             ))}
           </div>
         )}
-
-        {/* 카테고리 태그 */}
         <div className={styles["category-tag"]}>{item.category}</div>
-
-        {/* 판매자 정보 */}
         <div className={styles["seller-info"]}>
           <span>판매자:</span>
           <span className={styles["seller-name"]}>
-            {item.sellerId|| item.seller?.username || "학생1"}
+            {item.sellerId || "학생1"}
           </span>
         </div>
-
-        {/* 제목/가격/설명/사용감 */}
         <div className={styles["item-title"]}>{item.title}</div>
         <div className={styles.price}>{item.price?.toLocaleString()}원</div>
         <div className={styles["description-text"]}>{item.description}</div>
@@ -280,15 +241,12 @@ function ItemDetailPage() {
           <span>거래 장소: {item.place || "미정"}</span>
           <span>태그: {item.tags?.join(", ") || "없음"}</span>
         </div>
-
-        <button className={styles["chat-button"]} onClick={handleChatClick}>
+        <button className={styles["chat-button"]} onClick={handleStartChat}>
           채팅하기
         </button>
         <button className={styles["like-button"]} onClick={handleLikeClick}>
           찜하기
         </button>
-
-        {/* 연관 상품 */}
         <div className={styles.relatedItem}>
           <div className={styles["related-title"]}>연관된 상품</div>
           {relatedItems.length > 0 ? (

@@ -43,7 +43,7 @@ function ChatListPage() {
 
       // ✅ Spring Boot API 호출 (타임아웃 증가)
       const response = await api.get("/chat/rooms", {
-        params: { useid: userid },
+        params: { userid: userid },
         timeout: 15000, // 15초로 증가
       });
 
@@ -132,12 +132,12 @@ function ChatListPage() {
     }
 
     try {
-      const userId =
+      const userid =
         localStorage.getItem("userId") || localStorage.getItem("senderId");
 
       // ✅ Spring Boot API 호출
       const response = await api.delete(`/chat/rooms/${roomId}`, {
-        params: { userId: userId },
+        params: { userid: userid },
       });
 
       if (response.data.success) {
@@ -177,25 +177,25 @@ function ChatListPage() {
 
   // ✅ 채팅방 클릭 핸들러
   const handleChatRoomClick = async (room) => {
-  // 읽지 않은 메시지 읽음 처리
-  if (room.unreadCount > 0) {
-    markAsRead(room.roomId);
-  }
+    // 읽지 않은 메시지 읽음 처리
+    if (room.unreadCount > 0) {
+      markAsRead(room.roomId);
+    }
 
-  try {
-  const sellerId = room.sellerId;
-    // 채팅 페이지로 이동 (sellerId 포함)
-    navigate("/chat", {
-      state: {
-        ...room,
-        sellerId: room.sellerId, // 판매자 id를 명확히 포함
-        itemTransactionId: room.itemId,
-      },
-    });
-  } catch (err) {
-    alert("상품 정보를 불러올 수 없습니다.");
-  }
-};
+    try {
+      const sellerId = room.sellerId;
+      // 채팅 페이지로 이동 (sellerId 포함)
+      navigate("/chat", {
+        state: {
+          ...room,
+          sellerId: room.sellerId, // 판매자 id를 명확히 포함
+          itemTransactionId: room.itemId,
+        },
+      });
+    } catch (err) {
+      alert("상품 정보를 불러올 수 없습니다.");
+    }
+  };
 
   useEffect(() => {
     console.log("유즈 이펙트 실행");

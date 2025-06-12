@@ -1,13 +1,14 @@
+// src/pages/chat/ChatPage.jsx
+
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "./chat.module.css";
 import Header from "../../components/Header/Header";
 import ChatWindow from "../../components/ChatWindow/ChatWindow";
-import { useLocation } from "react-router-dom";
 import { getUserId } from "../../utils/authUtils.js";
 
-// ✅ axios 인스턴스 생성 (Java Spring 환경 반영)
+// Axios 인스턴스
 const api = axios.create({
   baseURL: "http://localhost:8080/api",
   timeout: 15000,
@@ -17,143 +18,67 @@ const api = axios.create({
 });
 
 const ChatPage = () => {
-  const Userid = getUserId();
-  const navigate = useNavigate();
+  const { chatRoomId } = useParams(); // URL에서 채팅방 ID 추출
   const location = useLocation();
-  const item = location.state;
+  const navigate = useNavigate();
+
+  // ✅ 변수명 통일: currentUserid (소문자 d)로 선언되어 있으므로, 이후에도 동일하게 사용
+  const currentUserid = getUserId();
+
+  const [item, setItem] = useState(location.state?.item || null);
   const [chatRoom, setChatRoom] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // ✅ 채팅방 생성 검증 함수 정의 (누락된 함수 추가)
-  const createChatRoomWithValidation = async (itemTransactionId, buyerId, sellerId) => {
-  try {
-
-    // ✅ 최종 검증
-    if (!buyerId || !sellerId || !itemTransactionId) {
-      throw new Error("필수 파라미터 누락");
-    }
-
-    if (buyerId === sellerId) {
-      throw new Error("자기 자신과는 채팅할 수 없습니다");
-    }
-
-    const requestData = {
-      itemTransactionId: Number(itemTransactionId),
-      buyerId: String(buyerId),
-      sellerId: String(sellerId),
-    };
-
-    console.log("채팅방 생성 요청 데이터:", requestData);
-
-    const response = await api.post("/chat/rooms", requestData, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    });
-
-    console.log("채팅방 생성/조회 성공:", response.data);
-    setChatRoom(response.data);
-  } catch (error) {
-    console.error("채팅방 생성 검증 실패:", error);
-    throw error;
-  }
-};
-
-  // ✅ 거래 상태 변경 (axios 연동)
-  const handleStatus = async (itemId, newStatus) => {
-    try {
-      console.log("거래 상태 변경:", { itemId, newStatus });
-
-      const response = await api.put(`/items/${itemId}/status`, {
-        status: newStatus,
-        Userid: Userid,
-      });
-
-      if (response.data.success) {
-        // ✅ 로컬 스토리지 업데이트 (최근 등록순 반영)
-        const allItems = JSON.parse(localStorage.getItem("items") || "[]");
-        const updatedItems = allItems.map((item) => {
-          if (item.id === itemId) {
-            return {
-              ...item,
-              status: newStatus,
-              updatedAt: new Date().toISOString(),
-            };
-          }
-          return item;
-        });
-
-        // ✅ 최근 등록순으로 정렬
-        const sortedItems = updatedItems.sort(
-          (a, b) =>
-            new Date(b.updatedAt || b.regDate) -
-            new Date(a.updatedAt || a.regDate)
-        );
-
-        localStorage.setItem("items", JSON.stringify(sortedItems));
-        alert("거래 완료되었습니다.");
-        navigate(-1);
-      } else {
-        alert("거래 상태 변경에 실패했습니다.");
-      }
-    } catch (error) {
-      console.error("거래 상태 변경 실패:", error);
-      alert("거래 완료되었습니다. (로컬 저장)");
-      navigate(-1);
-    }
-  };
-
-  // ✅ 채팅방 생성 또는 조회 (대화형 인공지능 지원)
   useEffect(() => {
-  const initializeChatRoom = async () => {
-    if (!item || !Userid) {
-      console.warn("필수 데이터 누락:", { item, Userid });
-      setLoading(false);
+    if (!chatRoomId) {
+      navigate("/chatList");
       return;
     }
 
-    try {
-      setLoading(true);
+    const fetchChatData = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get(`/chat/rooms/${chatRoomId}`, {
+          params: { userId: currentUserid },
+        });
+        const roomData = response.data;
+        setChatRoom(roomData);
 
-      // 여러 필드에서 판매자 ID를 안전하게 추출
-      const sellerId =
-        item.sellerId ||
-        item.OwnerId ||
-        item.otherUserId ||
-        item.otherUserid ||
-        item.seller?.userid ||
-        item.seller?.id ||
-        item.sellerUserid;
-
-      console.log("채팅방 초기화 - 판매자 ID 검증:", {
-        itemId: item.id,
-        buyerId: Userid,
-        sellerId: sellerId,
-        allSellerFields: {
-          OwnerId: item.OwnerId,
-          sellerId: item.sellerId,
-          sellerUserid: item.sellerUserid,
-          seller: item.seller,
-        },
-      });
-
-      if (!sellerId || sellerId === Userid) {
-        throw new Error(`유효하지 않은 판매자 정보: ${sellerId}`);
+        if (!item && roomData.item) {
+          setItem(roomData.item);
+        } else if (!roomData.item && roomData.itemTransactionId) {
+          const itemResponse = await api.get(
+            `/items/${roomData.itemTransactionId}`
+          );
+          setItem(itemResponse.data);
+        }
+      } catch (error) {
+        console.error("채팅방 정보를 불러오는 데 실패했습니다:", error);
+        alert("존재하지 않거나 접근 권한이 없는 채팅방입니다.");
+        navigate("/chatList");
+      } finally {
+        setLoading(false);
       }
+    };
 
-      // ✅ 채팅방 생성
-      await createChatRoomWithValidation(item.id, Userid, sellerId);
-      
+    fetchChatData();
+  }, [chatRoomId, currentUserid]);
+
+  // 거래 상태를 '거래완료'로 변경하는 함수
+  const handleStatus = async (itemId, newStatus) => {
+    try {
+      await api.put(`/items/${itemId}/status`, {
+        status: newStatus,
+        Userid: currentUserid,
+      });
+      alert("거래 완료로 상태가 변경되었습니다.");
+      // 상태 변경 후 UI에 즉시 반영
+      setItem((prevItem) => ({ ...prevItem, status: newStatus }));
     } catch (error) {
-      console.log("채팅방 초기화 실패:", error);
-    } finally { 
-      setLoading(false);
+      console.error("거래 상태 변경 실패:", error);
+      alert("거래 상태 변경에 실패했습니다.");
     }
   };
-
-  initializeChatRoom();
-}, [item, Userid, navigate]);
 
   if (loading) {
     return (
@@ -164,14 +89,27 @@ const ChatPage = () => {
     );
   }
 
-  if (!item) {
+  if (!item || !chatRoom) {
     return (
       <div className={styles.container}>
         <Header />
-        <div className={styles.error}>상품 정보를 찾을 수 없습니다.</div>
+        <div className={styles.error}>채팅 정보를 표시할 수 없습니다.</div>
       </div>
     );
   }
+
+  // 판매자 ID는 chatRoom 또는 item 정보에서 가져와 안정성을 높임
+  const sellerId = chatRoom.sellerId || item.sellerId;
+
+  const getImageUrl = (url) => {
+    if (!url) return "/assets/default-image.png";
+    if (url.startsWith("http")) return url;
+    if (url.startsWith("/uploads/")) {
+      const filename = url.replace("/uploads/", "");
+      return `http://localhost:8080/api/image/${filename}`;
+    }
+    return `http://localhost:8080/api/image/${url}`;
+  };
 
   return (
     <div className={styles.container}>
@@ -181,38 +119,36 @@ const ChatPage = () => {
           <div className={styles.image}>
             <img
               src={
-                item.imageUrl?.startsWith("http")
-                  ? item.imageUrl
-                  : `http://localhost:8080${item.imageUrl}`
+                (chatRoom?.itemImageUrl || item?.imageUrl)?.startsWith("http")
+                  ? chatRoom?.itemImageUrl || item?.imageUrl
+                  : `http://localhost:8080${
+                      chatRoom?.itemImageUrl || item?.imageUrl
+                    }`
               }
-              width={90}
-              height={90}
-              alt="상품"
+              alt={item?.title || "상품"}
               onError={(e) => {
-                e.target.src = "/assets/default-image.png";
+                e.currentTarget.src = "/assets/default-image.png";
+                e.currentTarget.onerror = null; // ✅ 무한 로드 방지
               }}
             />
-            {item.OwnerId === Userid && (
-              <button
-                onClick={() => handleStatus(item.id, "거래완료")}
-                className={styles.tradeButton}>
-                거래완료
-              </button>
-            )}
           </div>
           <div className={styles.item}>
             <h2>{item.title}</h2>
             <p>가격: {item.price?.toLocaleString()}원</p>
             <p>상태: {item.status || "판매중"}</p>
           </div>
+          {/* 현재 사용자가 판매자이고, 아직 거래완료가 아닐 때만 버튼 표시 */}
+          {sellerId === currentUserid && item.status !== "거래완료" && (
+            <button
+              onClick={() => handleStatus(item.id, "거래완료")}
+              className={styles.tradeButton}>
+              거래완료
+            </button>
+          )}
         </div>
 
-        {/* ✅ 실시간 메시징 지원 */}
-        <ChatWindow
-          roomId={chatRoom?.roomId || chatRoom?.id}
-          itemId={item.id}
-          otherUserid={item.OwnerId}
-        />
+        {/* ChatWindow 컴포넌트에 필요한 ID들을 props로 전달 */}
+        <ChatWindow roomId={chatRoomId} otherUserId={currentUserid} />
       </div>
     </div>
   );

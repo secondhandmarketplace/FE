@@ -34,7 +34,7 @@
   gap: 10px;
 }
 
-.image {
+.image img {
   background: none;
   display: flex;
   align-items: center;

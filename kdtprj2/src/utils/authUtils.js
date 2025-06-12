@@ -18,7 +18,7 @@ export const getUserId = () => {
       console.warn("유효하지 않은 사용자 ID 감지:", userId);
       return null;
     }
-    console.log("유효한 사용자 ID:", userId);
+    // console.log("유효한 사용자 ID:", userId);
     return userId;
   } catch (error) {
     console.error("사용자 ID 조회 중 오류:", error);
