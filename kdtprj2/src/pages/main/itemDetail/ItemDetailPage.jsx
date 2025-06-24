@@ -114,11 +114,17 @@ function ItemDetailPage() {
       setError(null);
 
       // ✅ 백엔드 API 엔드포인트와 파라미터명 일치
-      const response = await api.post("/chat/rooms", {
-        itemTransactionId: Number(itemId),
-        buyerId: currentUserId,
-        sellerId: item?.sellerId, // 실제 판매자 ID 사용
-      });
+      const requestData = {
+        userId: currentUserId,
+        otherUserId: item?.sellerId, // 실제 판매자 ID 사용
+        itemId: Number(itemId)
+      };
+
+      console.log("채팅방 생성 요청 데이터:", requestData);
+
+      const response = await api.post("/chat/rooms", requestData);
+
+      console.log("채팅방 생성 응답:", response.data);
 
       // ✅ 채팅방 생성 성공 시 해당 채팅방으로 이동
       const chatRoomId = response.data.id;
@@ -126,6 +132,7 @@ function ItemDetailPage() {
     } catch (err) {
       setError("채팅방 생성에 실패했습니다.");
       console.error("채팅방 생성 실패:", err);
+      console.error("에러 응답:", err.response?.data);
     } finally {
       setLoading(false);
     }

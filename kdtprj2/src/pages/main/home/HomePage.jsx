@@ -176,11 +176,7 @@ function HomePage() {
       setLoading(true);
       setError(null);
 
-      const response = await api.get("/items/category", {
-        params: {
-          category: category,
-        },
-      });
+      const response = await api.get(`/items/category/${encodeURIComponent(category)}`);
 
       const transformedItems = response.data.map((item) => ({
         id: item.itemid || item.id,

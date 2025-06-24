@@ -129,7 +129,7 @@ const LoginPage = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.profileSection}>
+      {/* <div className={styles.profileSection}>
         <img
           src="/assets/default-profile.png"
           alt="Profile"
@@ -137,7 +137,7 @@ const LoginPage = () => {
           width="80"
           height="80"
         />
-      </div>
+      </div> */}
       <form onSubmit={handleLogin}>
         <div className={styles.inputContainer}>
           <input

@@ -42,14 +42,26 @@ const ChatPage = () => {
           params: { userId: currentUserid },
         });
         const roomData = response.data;
+        console.log("채팅방 데이터:", roomData);
         setChatRoom(roomData);
 
-        if (!item && roomData.item) {
-          setItem(roomData.item);
-        } else if (!roomData.item && roomData.itemTransactionId) {
-          const itemResponse = await api.get(
-            `/items/${roomData.itemTransactionId}`
-          );
+        // ✅ 백엔드에서 item 정보를 개별 필드로 제공하므로 이를 조합
+        if (roomData.itemId && roomData.itemTitle) {
+          const itemData = {
+            id: roomData.itemId,
+            itemid: roomData.itemId, // 백엔드 호환성
+            title: roomData.itemTitle,
+            price: roomData.itemPrice,
+            imageUrl: roomData.itemImageUrl,
+            sellerId: roomData.otherUserId, // 상대방이 판매자라고 가정
+            status: "판매중" // 기본값
+          };
+          console.log("조합된 아이템 데이터:", itemData);
+          setItem(itemData);
+        } else if (roomData.itemTransactionId) {
+          // ✅ 개별 필드가 없으면 별도 API 호출
+          console.log("아이템 정보 별도 조회:", roomData.itemTransactionId);
+          const itemResponse = await api.get(`/items/${roomData.itemTransactionId}`);
           setItem(itemResponse.data);
         }
       } catch (error) {
@@ -102,7 +114,7 @@ const ChatPage = () => {
   const sellerId = chatRoom.sellerId || item.sellerId;
 
   const getImageUrl = (url) => {
-    if (!url) return "/assets/default-image.png";
+    if (!url) return "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuydtOuvuOyngDwvdGV4dD48L3N2Zz4=";
     if (url.startsWith("http")) return url;
     if (url.startsWith("/uploads/")) {
       const filename = url.replace("/uploads/", "");
@@ -127,7 +139,7 @@ const ChatPage = () => {
               }
               alt={item?.title || "상품"}
               onError={(e) => {
-                e.currentTarget.src = "/assets/default-image.png";
+                e.currentTarget.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuydtOuvuOyngDwvdGV4dD48L3N2Zz4=";
                 e.currentTarget.onerror = null; // ✅ 무한 로드 방지
               }}
             />
@@ -148,7 +160,7 @@ const ChatPage = () => {
         </div>
 
         {/* ChatWindow 컴포넌트에 필요한 ID들을 props로 전달 */}
-        <ChatWindow roomId={chatRoomId} otherUserId={currentUserid} />
+        <ChatWindow roomId={chatRoomId} userId={currentUserid} />
       </div>
     </div>
   );

@@ -14,7 +14,7 @@ const api = axios.create({
   },
 });
 
-const ChatWindow = ({ roomId, otherUserId }) => {
+const ChatWindow = ({ roomId, userId: propUserId }) => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
   const [stompClient, setStompClient] = useState(null);
@@ -22,20 +22,29 @@ const ChatWindow = ({ roomId, otherUserId }) => {
   const [loading, setLoading] = useState(true);
   const messagesEndRef = useRef(null);
 
-  // ✅ 사용자 ID 가져오기 (로컬 스토리지 활용)
-  const userId =
+  // ✅ 사용자 ID 가져오기 (props 우선, 로컬 스토리지 백업)
+  const userId = propUserId ||
+    localStorage.getItem("userid") ||
     localStorage.getItem("userId") ||
     localStorage.getItem("senderId") ||
     "guest";
 
+  console.log("ChatWindow userId:", userId, "roomId:", roomId);
+
   // ✅ 기존 메시지 로드 (axios 연동, 최근 등록순 정렬)
   const loadMessages = async () => {
-    if (!roomId) return;
+    console.log("loadMessages 호출됨 - roomId:", roomId, "userId:", userId);
+
+    if (!roomId) {
+      console.log("roomId가 없어서 메시지 로드 중단");
+      setLoading(false);
+      return;
+    }
 
     try {
-      console.log("메시지 로드:", roomId);
-      // ✅ 백엔드와 경로 일치: /api/chat-messages/room/{roomId}
-      const response = await api.get(`/chat-messages/room/${roomId}`);
+      console.log("메시지 로드 시작:", roomId);
+      // ✅ 백엔드와 경로 일치: /api/chat/rooms/{roomId}/messages
+      const response = await api.get(`/chat/rooms/${roomId}/messages`);
       console.log("메시지 로드 완료:", response.data);
 
       // ✅ 시간순으로 정렬 (오래된 순)
@@ -43,8 +52,10 @@ const ChatWindow = ({ roomId, otherUserId }) => {
         ? response.data.sort((a, b) => new Date(a.sentAt) - new Date(b.sentAt))
         : [];
       setMessages(sortedMessages);
+      console.log("정렬된 메시지 설정 완료:", sortedMessages.length, "개");
     } catch (error) {
       console.error("메시지 로드 실패:", error);
+      console.error("에러 상세:", error.response?.data);
       setMessages([]);
     } finally {
       setLoading(false);
@@ -53,7 +64,17 @@ const ChatWindow = ({ roomId, otherUserId }) => {
 
   // ✅ WebSocket 연결 (실시간 메시징 지원)
   useEffect(() => {
-    if (!roomId) return;
+    console.log("useEffect 실행됨 - roomId:", roomId, "userId:", userId);
+
+    if (!roomId) {
+      console.log("roomId가 없어서 WebSocket 연결 중단");
+      return;
+    }
+
+    if (!userId || userId === "guest") {
+      console.log("유효하지 않은 userId:", userId, "- WebSocket 연결 중단");
+      return;
+    }
 
     try {
       console.log("WebSocket 연결 시작:", roomId);
@@ -75,7 +96,23 @@ const ChatWindow = ({ roomId, otherUserId }) => {
             try {
               const receivedMessage = JSON.parse(message.body);
               console.log("실시간 메시지 수신:", receivedMessage);
-              setMessages((prev) => [...prev, receivedMessage]);
+
+              // 중복 메시지 방지: 이미 존재하는 메시지인지 확인
+              setMessages((prev) => {
+                const exists = prev.some(msg =>
+                  msg.messageId === receivedMessage.messageId ||
+                  (msg.content === receivedMessage.content &&
+                   msg.senderId === receivedMessage.senderId &&
+                   Math.abs(new Date(msg.sentAt) - new Date(receivedMessage.sentAt)) < 1000)
+                );
+
+                if (exists) {
+                  console.log("중복 메시지 무시:", receivedMessage);
+                  return prev;
+                }
+
+                return [...prev, receivedMessage];
+              });
             } catch (error) {
               console.error("메시지 파싱 오류:", error);
             }
@@ -103,7 +140,21 @@ const ChatWindow = ({ roomId, otherUserId }) => {
       console.error("WebSocket 초기화 실패:", error);
       loadMessages();
     }
-  }, [roomId]);
+  }, [roomId, userId]);
+
+  // ✅ 메시지 변경 시 자동 스크롤
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
+  // ✅ 메시지 변경 시 자동 스크롤
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   const sendMessage = async () => {
     if (!inputMessage.trim()) return;
@@ -116,27 +167,33 @@ const ChatWindow = ({ roomId, otherUserId }) => {
     };
 
     try {
-      console.log("메시지 전송:", messageData);
+      console.log("메시지 전송 시도:", messageData);
 
       // ✅ 1순위: WebSocket으로 실시간 전송
       if (stompClient && stompClient.connected) {
-        // stompClient.connected 추가
         stompClient.send(`/app/chat.send`, {}, JSON.stringify(messageData));
         console.log("WebSocket으로 메시지 전송 완료");
+        setInputMessage(""); // WebSocket 전송 후 입력창 비우기
       } else {
         // ✅ 2순위: axios로 HTTP 전송 (백업)
+        console.log("WebSocket 연결 없음, HTTP로 전송");
+
         const response = await api.post(
-          `/chat-messages/room/${roomId}`,
+          `/chat/rooms/${roomId}/messages`,
           messageData
         );
         console.log("HTTP로 메시지 전송 완료:", response.data);
-        setMessages((prev) => [...prev, response.data]);
+
+        // HTTP 전송 성공 시에만 메시지 추가 및 입력창 비우기
+        if (response.data) {
+          setMessages((prev) => [...prev, response.data]);
+          setInputMessage("");
+        }
       }
 
-      setInputMessage("");
     } catch (error) {
       console.error("메시지 전송 실패:", error);
-      alert("메시지 전송에 실패했습니다.");
+      alert(`메시지 전송에 실패했습니다: ${error.response?.data?.message || error.message}`);
     }
   };
 
@@ -146,6 +203,24 @@ const ChatWindow = ({ roomId, otherUserId }) => {
       sendMessage();
     }
   };
+
+  console.log("ChatWindow 렌더링 - loading:", loading, "roomId:", roomId, "userId:", userId);
+
+  if (!roomId) {
+    return (
+      <div className="chat-window error">
+        <div>❌ 채팅방 ID가 없습니다.</div>
+      </div>
+    );
+  }
+
+  if (!userId || userId === "guest") {
+    return (
+      <div className="chat-window error">
+        <div>❌ 사용자 정보가 없습니다. 로그인이 필요합니다.</div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -157,6 +232,11 @@ const ChatWindow = ({ roomId, otherUserId }) => {
 
   return (
     <div className="chat-window">
+      {/* 디버그 정보 */}
+      <div style={{ padding: "10px", background: "#f0f0f0", fontSize: "12px", borderBottom: "1px solid #ddd" }}>
+        🔍 DEBUG: roomId={roomId}, userId={userId}, messages={messages.length}개, connected={connected ? "YES" : "NO"}
+      </div>
+
       {/* <div className="chat-header">
         <span>💬 실시간 채팅 ({connected ? "🟢 연결됨" : "🔴 오프라인"})</span>
         <span className="room-info">Room: {roomId}</span>
